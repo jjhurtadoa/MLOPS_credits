@@ -30,7 +30,7 @@ def setup_logging(
     
     if _logging_configured and not force:
         logger = logging.getLogger(__name__)
-        logger.debug("Logging ya configurado.  Use force=True para reconfigurar.")
+        logger.debug("Logging ya configurado.Use force=True para reconfigurar.")
         return
     
     if log_format is None:
@@ -73,7 +73,7 @@ def get_logger(name: str) -> logging.Logger:
     if not _logging_configured: 
         setup_logging(level=logging.INFO)
     
-    return logging. getLogger(name)
+    return logging.getLogger(name)
 
 
 def reset_logging() -> None:
@@ -108,4 +108,4 @@ def reset_logging() -> None:
     for logger in loggers_to_clear:
         logger.handlers = []
         logger.propagate = True
-        logger.setLevel(logging. NOTSET)
+        logger.setLevel(logging.NOTSET)

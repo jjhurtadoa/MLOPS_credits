@@ -1,0 +1,56 @@
+cv_results:
+  cv_max: !!python/object/apply:numpy._core.multiarray.scalar
+  - &id001 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    2vq8EMupGUA=
+  cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UKYZ1NUHF0A=
+  cv_min: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Bl92tlLHE0A=
+  cv_std: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HLcXuQC+3j8=
+mlflow_run_id: 19ee3a4704cb41caaac278f98a419e83
+model_class: ElasticNet
+model_module: sklearn.linear_model
+model_name: elastic_net
+model_path: artifacts\models\elastic_net_model.pkl
+params:
+  alpha: 1.0
+  l1_ratio: 0.5
+  random_state: 42
+test_metrics:
+  mae: 3.4929091328828688
+  mape: 18.691057016048482
+  r2: 0.6118008344199017
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    i4rC5ppXFUA=
+train_metrics:
+  mae: 3.914289101611082
+  mape: 20.32023256472935
+  r2: 0.6286585671446923
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9pEVexO4FkA=
+trained_at: '2025-12-31T16:34:53.270347'

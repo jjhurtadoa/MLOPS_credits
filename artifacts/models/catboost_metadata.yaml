@@ -1,0 +1,58 @@
+cv_results:
+  cv_max: !!python/object/apply:numpy._core.multiarray.scalar
+  - &id001 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    ZLQna1VLEkA=
+  cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3gW2G8sTDUA=
+  cv_min: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lDEJZfnHB0A=
+  cv_std: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4B/GY8Jp4j8=
+mlflow_run_id: 1c1ee7a81043463e99b9963082b0bf1f
+model_class: CatBoostRegressor
+model_module: catboost
+model_name: catboost
+model_path: artifacts\models\catboost_model.pkl
+params:
+  depth: 6
+  iterations: 100
+  learning_rate: 0.1
+  random_state: 42
+  verbose: false
+test_metrics:
+  mae: 1.8682298958667387
+  mape: 9.911939880890662
+  r2: 0.8731755150945412
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XEdiJrxlCEA=
+train_metrics:
+  mae: 1.411530165927262
+  mape: 7.498394212151652
+  r2: 0.9614025456719182
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    y5efw15M/T8=
+trained_at: '2025-12-31T16:34:44.837777'

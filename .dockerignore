@@ -1,0 +1,77 @@
+# ============================================================================
+# . dockerignore - Optimizar build de Docker
+# ============================================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+. Python
+*. egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Tests
+tests/
+. pytest_cache/
+.coverage
+htmlcov/
+*. coverage
+
+# Data (NO copiar datos raw/interim al contenedor)
+data/raw/
+data/interim/
+data/external/
+
+# Notebooks
+notebooks/
+*.ipynb
+
+# MLflow runs (pesados, no necesarios en contenedor)
+artifacts/mlruns/
+mlruns/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+. idea/
+*.swp
+*. swo
+. DS_Store
+
+# Docs
+docs/
+*.md
+! README.md
+
+# CI/CD
+.github/
+
+# Logs
+logs/
+*.log
+
+# OS
+Thumbs.db
+. DS_Store
+
+# Docker
+docker-compose. override.yml
+. dockerignore
+Dockerfile*
+
+# Env files
+.env
+.env.*

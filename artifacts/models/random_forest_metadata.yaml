@@ -1,0 +1,59 @@
+cv_results:
+  cv_max: !!python/object/apply:numpy._core.multiarray.scalar
+  - &id001 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    vNe/suOmE0A=
+  cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pOmiFy9yEEA=
+  cv_min: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FltXIF9xDEA=
+  cv_std: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +PBL6e6G3D8=
+mlflow_run_id: 47066e9651b14f6caac424d106033aa1
+model_class: RandomForestRegressor
+model_module: sklearn.ensemble
+model_name: random_forest
+model_path: artifacts\models\random_forest_model.pkl
+params:
+  max_depth: 10
+  min_samples_leaf: 2
+  min_samples_split: 5
+  n_estimators: 100
+  n_jobs: -1
+  random_state: 42
+test_metrics:
+  mae: 2.1478552280532
+  mape: 11.578635867890027
+  r2: 0.8658898417964692
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    swb/BKEWCUA=
+train_metrics:
+  mae: 1.28494021358414
+  mape: 6.445140389703366
+  r2: 0.9505699350572776
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SsLB9O+TAEA=
+trained_at: '2025-12-31T16:34:25.372443'

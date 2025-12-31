@@ -21,7 +21,7 @@ def load_raw_data(data_path: str = 'data/raw/boston_housing.csv') -> pd.DataFram
     logger.info(f"📂 Cargando datos desde:  {data_path}")
     df = pd.read_csv(data_path)
     
-    logger.info(f"✓ Datos cargados: {df.shape[0]} filas, {df. shape[1]} columnas")
+    logger.info(f"✓ Datos cargados: {df.shape[0]} filas, {df.shape[1]} columnas")
     logger.info(f"✓ Columnas: {list(df.columns)}")
     
     if df.empty:
@@ -38,7 +38,7 @@ def split_data(
     test_size: float = 0.2,
     random_state: int = 42,
     stratify: bool = False
-) -> Tuple[pd.DataFrame, pd.DataFrame, pd. Series, pd.Series]:
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     """Divide datos en train y test"""
     logger.info("="*60)
     logger.info("DIVISIÓN TRAIN/TEST")
@@ -65,11 +65,11 @@ def split_data(
     )
     
     logger.info(f"✓ Train set: {X_train.shape[0]} filas ({X_train.shape[0]/len(df)*100:.1f}%)")
-    logger.info(f"✓ Test set:    {X_test.shape[0]} filas ({X_test. shape[0]/len(df)*100:.1f}%)")
+    logger.info(f"✓ Test set:    {X_test.shape[0]} filas ({X_test.shape[0]/len(df)*100:.1f}%)")
     logger.info(f"✓ Features:  {X_train.shape[1]}")
     logger.info(f"\nDistribución del target:")
     logger.info(f"  Train - Media: {y_train.mean():.2f}, Std: {y_train.std():.2f}")
-    logger.info(f"  Test  - Media: {y_test. mean():.2f}, Std: {y_test.std():.2f}")
+    logger.info(f"  Test  - Media: {y_test.mean():.2f}, Std: {y_test.std():.2f}")
     
     return X_train, X_test, y_train, y_test
 
@@ -114,7 +114,7 @@ def save_data(
 def load_processed_data(
     data_dir: str = 'data/processed',
     target_column: str = 'MEDV'
-) -> Tuple[pd.DataFrame, pd. DataFrame, pd.Series, pd. Series]:
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     """Carga datos ya divididos"""
     data_path = Path(data_dir)
     

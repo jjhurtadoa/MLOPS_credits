@@ -1,0 +1,60 @@
+cv_results:
+  cv_max: !!python/object/apply:numpy._core.multiarray.scalar
+  - &id001 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    Lp5sDK22FEA=
+  cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    s7V1nRdeD0A=
+  cv_min: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    u9HvXSkDCUA=
+  cv_std: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ayBPeB8H5j8=
+mlflow_run_id: 071ceeb01b4b44acb62cf00484204cd1
+model_class: XGBRegressor
+model_module: xgboost
+model_name: xgboost
+model_path: artifacts\models\xgboost_model.pkl
+params:
+  colsample_bytree: 0.8
+  learning_rate: 0.1
+  max_depth: 6
+  n_estimators: 100
+  n_jobs: -1
+  random_state: 42
+  subsample: 0.8
+test_metrics:
+  mae: 1.9512814222597608
+  mape: 10.591333147244896
+  r2: 0.9013584220782489
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZgyErDqEBUA=
+train_metrics:
+  mae: 0.2688018279500527
+  mape: 1.4091426437625831
+  r2: 0.9985444221803769
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    av2yYCTC1j8=
+trained_at: '2025-12-31T16:34:31.227658'

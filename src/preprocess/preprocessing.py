@@ -230,7 +230,7 @@ class OutlierHandler(BaseEstimator, TransformerMixin):
         """Aplica manejo de outliers"""
         X_transformed = X.copy()
         
-        # 1. Log Transform
+        # 1.Log Transform
         log_columns = self.config.get('log_transform', [])
         for col in log_columns:
             if col in X_transformed.columns:
@@ -242,7 +242,7 @@ class OutlierHandler(BaseEstimator, TransformerMixin):
                     X_transformed[col] = np.log1p(X_transformed[col])
                 logger.debug(f"Aplicado log transform a {col}")
         
-        # 2. IQR Capping
+        # 2.IQR Capping
         for col, stats in self.statistics_.items():
             if stats['strategy'] == 'capping_iqr' and col in X_transformed.columns:
                 X_transformed[col] = X_transformed[col].clip(
@@ -251,7 +251,7 @@ class OutlierHandler(BaseEstimator, TransformerMixin):
                 )
                 logger.debug(f"Aplicado IQR capping a {col}")
         
-        # 3. Winsorization
+        # 3.Winsorization
         winsor_columns = self.config.get('capping_winsor', [])
         for col in winsor_columns: 
             if col in X_transformed.columns:
@@ -427,10 +427,10 @@ class DataPreprocessor(BaseEstimator, TransformerMixin):
     Pipeline completo de preprocesamiento
     
     Aplica en orden:
-    1. Manejo de valores faltantes
-    2. Manejo de outliers
-    3. Reducción de correlación
-    4. Escalado de features
+    1.Manejo de valores faltantes
+    2.Manejo de outliers
+    3.Reducción de correlación
+    4.Escalado de features
     
     Attributes:
         config (dict): Configuración completa de preprocessing_config.yaml
@@ -480,24 +480,24 @@ class DataPreprocessor(BaseEstimator, TransformerMixin):
         self.feature_names_in_ = X.columns.tolist()
         X_temp = X.copy()
         
-        # 1. Missing Values
+        # 1.Missing Values
         if 'handling_na' in self.config:
             self.missing_handler_ = MissingValueHandler(self.config['handling_na'])
             X_temp = self.missing_handler_.fit_transform(X_temp)
         
-        # 2. Outliers
+        # 2.Outliers
         if 'handling_outliers' in self.config:
             self.outlier_handler_ = OutlierHandler(self.config['handling_outliers'])
             X_temp = self.outlier_handler_.fit_transform(X_temp)
         
-        # 3. Correlation
+        # 3.Correlation
         if 'handling_correlated_features' in self.config:
             self.correlation_reducer_ = CorrelationReducer(
                 self.config['handling_correlated_features']
             )
             X_temp = self.correlation_reducer_.fit_transform(X_temp)
         
-        # 4. Scaling
+        # 4.Scaling
         if 'scaler' in self.config:
             self.scaler_ = FeatureScaler(self.config['scaler'])
             X_temp = self.scaler_.fit_transform(X_temp)
@@ -557,7 +557,7 @@ class DataPreprocessor(BaseEstimator, TransformerMixin):
         Guarda preprocessor en disco
         
         Args:
-            filepath: Ruta donde guardar (.  pkl)
+            filepath: Ruta donde guardar (.pkl)
         """
         filepath = Path(filepath)
         filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -571,7 +571,7 @@ class DataPreprocessor(BaseEstimator, TransformerMixin):
         Carga preprocessor desde disco
         
         Args: 
-            filepath: Ruta del archivo .  pkl
+            filepath: Ruta del archivo .pkl
             
         Returns: 
             DataPreprocessor cargado

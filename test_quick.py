@@ -38,7 +38,7 @@ try:
     # Test 4
     print("\n4️⃣ Cargando datos procesados...")
     X_train_loaded, X_test_loaded, y_train_loaded, y_test_loaded = load_processed_data()
-    assert X_train. shape == X_train_loaded. shape
+    assert X_train.shape == X_train_loaded.shape
     print(f"   ✅ Cargado: Train {X_train_loaded.shape}, Test {X_test_loaded.shape}")
 
     print("\n" + "="*60)

@@ -1,5 +1,5 @@
 # ============================================================================
-# BOSTON HOUSING MLOPS PROJECT - . gitignore
+# BOSTON HOUSING MLOPS PROJECT - .gitignore
 # ============================================================================
 
 # ----------------------------------------------------------------------------
@@ -35,26 +35,26 @@ share/python-wheels/
 MANIFEST
 
 # PyInstaller
-*. manifest
+*.manifest
 *.spec
 
 # Unit test / coverage reports
 htmlcov/
 .tox/
-. nox/
+.nox/
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*. cover
+*.cover
 *.py,cover
-. hypothesis/
+.hypothesis/
 .pytest_cache/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-*/. ipynb_checkpoints/*
+*/.ipynb_checkpoints/*
 
 # IPython
 profile_default/
@@ -76,16 +76,16 @@ venv.bak/
 # ----------------------------------------------------------------------------
 # VSCode
 .vscode/
-*. code-workspace
+*.code-workspace
 
 # PyCharm
 .idea/
 *.iml
-*. iws
-*. ipr
+*.iws
+*.ipr
 
 # Sublime Text
-*. sublime-project
+*.sublime-project
 *.sublime-workspace
 
 # Vim
@@ -103,23 +103,23 @@ venv.bak/
 # ----------------------------------------------------------------------------
 # macOS
 .DS_Store
-. AppleDouble
-. LSOverride
+.AppleDouble
+.LSOverride
 ._*
 
 # Windows
-Thumbs. db
+Thumbs.db
 Thumbs.db: encryptable
 ehthumbs.db
 ehthumbs_vista.db
-*. stackdump
+*.stackdump
 [Dd]esktop.ini
 $RECYCLE.BIN/
 
 # Linux
 *~
-. directory
-. Trash-*
+.directory
+.Trash-*
 
 # ----------------------------------------------------------------------------
 # DATOS (CRÍTICO PARA MLOPS)
@@ -127,11 +127,11 @@ $RECYCLE.BIN/
 # Datos raw (pueden ser grandes o sensibles)
 # EXCEPTO:   HousingData.csv es pequeño y público, lo dejamos
 # data/raw/*
-# ! data/raw/. gitkeep
+# ! data/raw/.gitkeep
 # ! data/raw/HousingData.csv
 
 # Datos procesados (se regeneran con scripts)
-data/processed/*. csv
+data/processed/*.csv
 data/interim/*.csv
 data/external/*
 
@@ -143,18 +143,18 @@ data/external/*
 # ----------------------------------------------------------------------------
 # MODELOS Y ARTIFACTS (CRÍTICO)
 # ----------------------------------------------------------------------------
-# Modelos entrenados (. pkl pueden ser grandes)
-artifacts/models/*. pkl
+# Modelos entrenados (.pkl pueden ser grandes)
+artifacts/models/*.pkl
 artifacts/models/*.h5
 artifacts/models/*.pt
 artifacts/models/*.pth
 artifacts/models/*.joblib
 
 # Pero SÍ versionar metadata y comparaciones
-! artifacts/models/*. yaml
+! artifacts/models/*.yaml
 !artifacts/models/*.json
 !artifacts/models/*.csv
-!artifacts/models/. gitkeep
+!artifacts/models/.gitkeep
 
 # Preprocessors (estos SÍ se pueden versionar si son pequeños)
 # artifacts/preprocessors/*.pkl  # Descomentar si son muy grandes
@@ -164,9 +164,9 @@ artifacts/mlruns/
 mlruns/
 
 # Logs (se regeneran)
-artifacts/logs/*. log
-logs/*. log
-*. log
+artifacts/logs/*.log
+logs/*.log
+*.log
 
 # Mantener estructura
 ! artifacts/models/.gitkeep
@@ -183,51 +183,51 @@ artifacts/evaluation/*.jpg
 artifacts/evaluation/*.pdf
 
 # Pero SÍ versionar reportes
-!artifacts/evaluation/*. html
+!artifacts/evaluation/*.html
 !artifacts/evaluation/*.md
-!artifacts/evaluation/. gitkeep
+!artifacts/evaluation/.gitkeep
 
 # ----------------------------------------------------------------------------
 # DOCUMENTACIÓN
 # ----------------------------------------------------------------------------
 # Build artifacts de documentación
 docs/_build/
-docs/. doctrees/
+docs/.doctrees/
 site/
 
 # ----------------------------------------------------------------------------
 # OTROS
 # ----------------------------------------------------------------------------
 # Secrets y configuraciones sensibles
-. env
+.env
 .env.local
-. env.*. local
+.env.*.local
 secrets/
-*. key
+*.key
 *.pem
-credentials. json
+credentials.json
 
 # Archivos temporales
 *.tmp
 *.temp
-. tmp/
+.tmp/
 .temp/
 
 # Archivos de backup
-*. bak
+*.bak
 *.backup
 *.old
 
 # Archivos comprimidos grandes
 *.zip
 *.tar.gz
-*. rar
+*.rar
 *.7z
 
 # Archivos de base de datos local
 *.db
 *.sqlite
-*. sqlite3
+*.sqlite3
 
 # ----------------------------------------------------------------------------
 # ESPECÍFICOS DEL PROYECTO

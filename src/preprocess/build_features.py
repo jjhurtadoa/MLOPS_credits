@@ -2,7 +2,7 @@
 Módulo de Feature Engineering
 
 Crea features derivadas y transformaciones adicionales
-para mejorar el poder predictivo del modelo.  
+para mejorar el poder predictivo del modelo.
 
 Estrategias implementadas:
 - Features de interacción (productos, ratios)
@@ -44,9 +44,9 @@ class InteractionFeatureCreator(BaseEstimator, TransformerMixin):
         
     Example:
         >>> interactions = [
-        ...     {'type': 'product', 'features': ['RM', 'AGE'], 'name': 'RM_x_AGE'},
-        ...     {'type': 'ratio', 'features': ['LSTAT', 'RM'], 'name': 'LSTAT_per_RM'}
-        ... ]
+        ...  {'type': 'product', 'features': ['RM', 'AGE'], 'name': 'RM_x_AGE'},
+        ...  {'type': 'ratio', 'features': ['LSTAT', 'RM'], 'name': 'LSTAT_per_RM'}
+        ...]
         >>> creator = InteractionFeatureCreator(interactions)
         >>> X_new = creator.fit_transform(X)
     """
@@ -88,7 +88,7 @@ class InteractionFeatureCreator(BaseEstimator, TransformerMixin):
             # Verificar que features existen
             missing = [f for f in required_features if f not in X.columns]
             if missing:
-                logger.warning(f"⚠️  Interacción '{interaction. get('name')}' omitida:  "
+                logger.warning(f"⚠️  Interacción '{interaction.get('name')}' omitida:  "
                              f"features faltantes {missing}")
                 continue
             
@@ -227,41 +227,41 @@ class RealEstateDomainFeatures(BaseEstimator, TransformerMixin):
         """Crea features de dominio"""
         X_transformed = X.copy()
         
-        # 1. Rooms per Age (calidad de mantenimiento)
+        # 1.Rooms per Age (calidad de mantenimiento)
         if 'rooms_per_age' in self.created_features_:
             # Más habitaciones en edificio viejo = mejor mantenimiento
             X_transformed['rooms_per_age'] = X['RM'] / (X['AGE'] + 1)  # +1 para evitar div/0
             logger.debug("✓ Creada:  rooms_per_age (RM/AGE)")
         
-        # 2. Tax per Room
+        # 2.Tax per Room
         if 'tax_per_room' in self.created_features_:
             X_transformed['tax_per_room'] = X['TAX'] / X['RM']
             logger.debug("✓ Creada: tax_per_room (TAX/RM)")
         
-        # 3. Accessibility Score
+        # 3.Accessibility Score
         if 'accessibility_score' in self.created_features_: 
             # Menor distancia + más acceso a highways = mejor
             X_transformed['accessibility_score'] = X['RAD'] / (X['DIS'] + 0.1)
             logger.debug("✓ Creada:  accessibility_score (RAD/DIS)")
         
-        # 4. Socioeconomic Index
+        # 4.Socioeconomic Index
         if 'socioeconomic_index' in self.created_features_: 
             # Combina % población de bajo estatus y ratio estudiante-profesor
             X_transformed['socioeconomic_index'] = X['LSTAT'] * X['PTRATIO']
             logger.debug("✓ Creada: socioeconomic_index (LSTAT*PTRATIO)")
         
-        # 5. Property Quality
+        # 5.Property Quality
         if 'property_quality' in self.created_features_: 
             # Más habitaciones + menos población baja = mejor calidad
             X_transformed['property_quality'] = X['RM'] * (1 - X['LSTAT']/100)
             logger.debug("✓ Creada:  property_quality (RM*(1-LSTAT/100))")
         
-        # 6. Crime weighted by industry
+        # 6.Crime weighted by industry
         if 'crime_per_capita_weighted' in self.created_features_:
             X_transformed['crime_per_capita_weighted'] = X['CRIM'] * X['INDUS']
             logger.debug("✓ Creada: crime_per_capita_weighted (CRIM*INDUS)")
         
-        # 7. Pollution in residential areas
+        # 7.Pollution in residential areas
         if 'pollution_residential' in self.created_features_:
             # NOx en áreas no industriales es peor
             X_transformed['pollution_residential'] = X['NOX'] * (1 - X['INDUS']/100)
@@ -402,9 +402,9 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
     Pipeline completo de feature engineering
     
     Aplica en orden: 
-    1. Features de interacción (si están configuradas)
-    2. Features de dominio (real estate)
-    3. Features polinomiales (opcional)
+    1.Features de interacción (si están configuradas)
+    2.Features de dominio (real estate)
+    3.Features polinomiales (opcional)
     
     Attributes:
         config (dict): Configuración de feature engineering
@@ -414,10 +414,10 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         
     Example:
         >>> config = {
-        ...     'interactions': [... ],
-        ...     'domain_features': True,
-        ...     'polynomial':  {'degree': 2, 'features': ['RM', 'LSTAT']}
-        ... }
+        ...  'interactions': [...],
+        ...  'domain_features': True,
+        ...  'polynomial':  {'degree': 2, 'features': ['RM', 'LSTAT']}
+        ...}
         >>> engineer = FeatureEngineer(config)
         >>> X_engineered = engineer.fit_transform(X_train)
     """
@@ -444,19 +444,19 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         self.feature_names_in_ = X.columns.tolist()
         X_temp = X.copy()
         
-        # 1. Interaction Features
+        # 1.Interaction Features
         if 'interactions' in self.config and self.config['interactions']:
             self.interaction_creator_ = InteractionFeatureCreator(
                 self.config['interactions']
             )
             X_temp = self.interaction_creator_.fit_transform(X_temp)
         
-        # 2. Domain Features
+        # 2.Domain Features
         if self.config.get('domain_features', True):
             self.domain_features_ = RealEstateDomainFeatures()
             X_temp = self.domain_features_.fit_transform(X_temp)
         
-        # 3. Polynomial Features (opcional)
+        # 3.Polynomial Features (opcional)
         if 'polynomial' in self.config:
             poly_config = self.config['polynomial']
             self.poly_features_ = PolynomialFeatureCreator(

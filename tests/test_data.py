@@ -207,7 +207,7 @@ def test_with_real_data(real_boston_data):
     # Verificar que no hay data leakage
     train_indices = set(X_train.index)
     test_indices = set(X_test.index)
-    assert len(train_indices. intersection(test_indices)) == 0
+    assert len(train_indices.intersection(test_indices)) == 0
 
 
 # ============================================================================
