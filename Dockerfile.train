@@ -1,0 +1,7 @@
+FROM python:3.10-slim
+WORKDIR /workspace
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . /workspace
+ENV PYTHONUNBUFFERED=1
+CMD ["python", "src/train.py", "--data", "data/processed/processed.csv", "--output", "models/model.joblib"]

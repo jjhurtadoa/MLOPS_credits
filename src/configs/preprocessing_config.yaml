@@ -1,0 +1,64 @@
+feature_processing:
+  handling_na:
+    mean: []
+    median:
+    - CRIM
+    - ZN
+    - INDUS
+    - AGE
+    - LSTAT
+    most_frequent:
+    - CHAS
+    no_action:
+    - NOX
+    - RM
+    - DIS
+    - RAD
+    - TAX
+    - PTRATIO
+    - B
+    - MEDV
+  handling_outliers:
+    remove: []
+    log_transform:
+    - CRIM
+    - ZN
+    - LSTAT
+    capping_iqr:
+    - RM
+    - B
+    capping_winsor:
+    - PTRATIO
+    no_action:
+    - INDUS
+    - NOX
+    - AGE
+    - DIS
+    - RAD
+    - TAX
+  handling_correlated_features:
+    remove:
+    - RAD
+    - B
+    no_action:
+    - CRIM
+    - ZN
+    - INDUS
+    - CHAS
+    - NOX
+    - RM
+    - AGE
+    - DIS
+    - TAX
+    - PTRATIO
+    - LSTAT
+    - MEDV
+  scaler: RobustScaler
+model_selection:
+  candidates:
+  - RandomForestRegressor
+  - XGBRegressor
+  - LGBMRegressor
+feature_engineering:
+  domain_features: true
+  interactions: []

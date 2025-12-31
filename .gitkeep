@@ -1,0 +1,9 @@
+# Crear . gitkeep en directorios vacíos
+touch data/processed/.gitkeep
+touch data/interim/.gitkeep
+touch data/external/.gitkeep
+touch artifacts/models/.gitkeep
+touch artifacts/preprocessors/.gitkeep
+touch artifacts/logs/.gitkeep
+touch artifacts/mlruns/.gitkeep
+touch artifacts/evaluation/.gitkeep

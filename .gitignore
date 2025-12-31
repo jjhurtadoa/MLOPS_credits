@@ -1,0 +1,246 @@
+# ============================================================================
+# BOSTON HOUSING MLOPS PROJECT - . gitignore
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Python
+# ----------------------------------------------------------------------------
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*. manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+. nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*. cover
+*.py,cover
+. hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/. ipynb_checkpoints/*
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# ----------------------------------------------------------------------------
+# IDEs y Editores
+# ----------------------------------------------------------------------------
+# VSCode
+.vscode/
+*. code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*. iws
+*. ipr
+
+# Sublime Text
+*. sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ----------------------------------------------------------------------------
+# Sistema Operativo
+# ----------------------------------------------------------------------------
+# macOS
+.DS_Store
+. AppleDouble
+. LSOverride
+._*
+
+# Windows
+Thumbs. db
+Thumbs.db: encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*. stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+. directory
+. Trash-*
+
+# ----------------------------------------------------------------------------
+# DATOS (CRÍTICO PARA MLOPS)
+# ----------------------------------------------------------------------------
+# Datos raw (pueden ser grandes o sensibles)
+# EXCEPTO:   HousingData.csv es pequeño y público, lo dejamos
+# data/raw/*
+# ! data/raw/. gitkeep
+# ! data/raw/HousingData.csv
+
+# Datos procesados (se regeneran con scripts)
+data/processed/*. csv
+data/interim/*.csv
+data/external/*
+
+# Mantener estructura de directorios
+! data/processed/.gitkeep
+! data/interim/.gitkeep
+!data/external/.gitkeep
+
+# ----------------------------------------------------------------------------
+# MODELOS Y ARTIFACTS (CRÍTICO)
+# ----------------------------------------------------------------------------
+# Modelos entrenados (. pkl pueden ser grandes)
+artifacts/models/*. pkl
+artifacts/models/*.h5
+artifacts/models/*.pt
+artifacts/models/*.pth
+artifacts/models/*.joblib
+
+# Pero SÍ versionar metadata y comparaciones
+! artifacts/models/*. yaml
+!artifacts/models/*.json
+!artifacts/models/*.csv
+!artifacts/models/. gitkeep
+
+# Preprocessors (estos SÍ se pueden versionar si son pequeños)
+# artifacts/preprocessors/*.pkl  # Descomentar si son muy grandes
+
+# MLflow tracking (NUNCA versionar)
+artifacts/mlruns/
+mlruns/
+
+# Logs (se regeneran)
+artifacts/logs/*. log
+logs/*. log
+*. log
+
+# Mantener estructura
+! artifacts/models/.gitkeep
+!artifacts/preprocessors/.gitkeep
+! artifacts/logs/.gitkeep
+!artifacts/mlruns/.gitkeep
+
+# ----------------------------------------------------------------------------
+# EVALUACIÓN
+# ----------------------------------------------------------------------------
+# Gráficos generados (se regeneran)
+artifacts/evaluation/*.png
+artifacts/evaluation/*.jpg
+artifacts/evaluation/*.pdf
+
+# Pero SÍ versionar reportes
+!artifacts/evaluation/*. html
+!artifacts/evaluation/*.md
+!artifacts/evaluation/. gitkeep
+
+# ----------------------------------------------------------------------------
+# DOCUMENTACIÓN
+# ----------------------------------------------------------------------------
+# Build artifacts de documentación
+docs/_build/
+docs/. doctrees/
+site/
+
+# ----------------------------------------------------------------------------
+# OTROS
+# ----------------------------------------------------------------------------
+# Secrets y configuraciones sensibles
+. env
+.env.local
+. env.*. local
+secrets/
+*. key
+*.pem
+credentials. json
+
+# Archivos temporales
+*.tmp
+*.temp
+. tmp/
+.temp/
+
+# Archivos de backup
+*. bak
+*.backup
+*.old
+
+# Archivos comprimidos grandes
+*.zip
+*.tar.gz
+*. rar
+*.7z
+
+# Archivos de base de datos local
+*.db
+*.sqlite
+*. sqlite3
+
+# ----------------------------------------------------------------------------
+# ESPECÍFICOS DEL PROYECTO
+# ----------------------------------------------------------------------------
+# Experimentos locales (notebooks no versionados)
+notebooks/experiments/
+notebooks/scratch/
+
+# Outputs temporales de scripts
+outputs/
+tmp/
+
+# Configuraciones locales personalizadas
+*_local.yaml
+*_local.yml
+config_local.py
