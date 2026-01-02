@@ -36,7 +36,7 @@ COPY --chown=appuser:appuser requirements.txt requirements-api.txt ./
 
 # Instalar dependencias Python
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements. txt && \
+    pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir -r requirements-api.txt && \
     pip install --no-cache-dir gunicorn
 

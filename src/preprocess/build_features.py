@@ -44,8 +44,8 @@ class InteractionFeatureCreator(BaseEstimator, TransformerMixin):
         
     Example:
         >>> interactions = [
-        ...  {'type': 'product', 'features': ['RM', 'AGE'], 'name': 'RM_x_AGE'},
-        ...  {'type': 'ratio', 'features': ['LSTAT', 'RM'], 'name': 'LSTAT_per_RM'}
+        ...{'type': 'product', 'features': ['RM', 'AGE'], 'name': 'RM_x_AGE'},
+        ...{'type': 'ratio', 'features': ['LSTAT', 'RM'], 'name': 'LSTAT_per_RM'}
         ...]
         >>> creator = InteractionFeatureCreator(interactions)
         >>> X_new = creator.fit_transform(X)
@@ -414,9 +414,9 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         
     Example:
         >>> config = {
-        ...  'interactions': [...],
-        ...  'domain_features': True,
-        ...  'polynomial':  {'degree': 2, 'features': ['RM', 'LSTAT']}
+        ...'interactions': [...],
+        ...'domain_features': True,
+        ...'polynomial':  {'degree': 2, 'features': ['RM', 'LSTAT']}
         ...}
         >>> engineer = FeatureEngineer(config)
         >>> X_engineered = engineer.fit_transform(X_train)

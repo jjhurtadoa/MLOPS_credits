@@ -41,7 +41,7 @@ class PreprocessorLoader:
                 self._data_preprocessor = joblib.load(dp_file)
                 logger.info("✓ Data preprocessor cargado")
             else:
-                logger. warning(f"⚠️ Data preprocessor no encontrado:  {data_preprocessor_path}")
+                logger.warning(f"⚠️ Data preprocessor no encontrado:  {data_preprocessor_path}")
             
             # Cargar feature engineer
             fe_file = Path(feature_engineer_path)
@@ -69,11 +69,11 @@ class PreprocessorLoader:
         
         logger.debug(f"Input features:  {X.columns.tolist()}")
         
-        # 1. Data preprocessing (limpieza, outliers, scaling, etc.)
+        # 1.Data preprocessing (limpieza, outliers, scaling, etc.)
         X_preprocessed = self._data_preprocessor.transform(X)
         logger.debug(f"Después de data_preprocessor: {X_preprocessed.columns.tolist()}")
         
-        # 2. Feature engineering
+        # 2.Feature engineering
         X_engineered = self._feature_engineer.transform(X_preprocessed)
         logger.debug(f"Después de feature_engineer: {X_engineered.columns.tolist()}")
         

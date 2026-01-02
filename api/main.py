@@ -5,6 +5,7 @@ FastAPI - Boston Housing Price Prediction API
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
 import pandas as pd
 import logging
 
@@ -25,13 +26,53 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Crear app
+
+# ============================================================================
+# LIFESPAN CONTEXT (reemplaza on_event)
+# ============================================================================
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Lifespan context manager para startup/shutdown
+    
+    Se ejecuta: 
+    - Al inicio:  carga modelo y preprocessors
+    - Al final: cleanup (si fuera necesario)
+    """
+    # STARTUP
+    try:
+        logger.info("🚀 Iniciando API...")
+        
+        # Cargar preprocessors
+        preprocessor_loader.load_preprocessors(
+            "artifacts/preprocessors/data_preprocessor.pkl",
+            "artifacts/preprocessors/feature_engineer.pkl"
+        )
+        
+        # Cargar modelo
+        model_loader.load_model("artifacts/models/best_model.pkl")
+        
+        logger.info("✓ API lista")
+    except Exception as e:
+        logger.error(f"❌ Error en startup: {e}")
+        raise
+    
+    # Yield control to app
+    yield
+    
+    # SHUTDOWN (si fuera necesario)
+    logger.info("👋 Cerrando API...")
+
+
+# Crear app con lifespan
 app = FastAPI(
     title=settings.app_name,
     description=settings.app_description,
     version=settings.app_version,
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan  # ← Nuevo
 )
 
 # CORS
@@ -45,38 +86,7 @@ app.add_middleware(
 
 
 # ============================================================================
-# STARTUP/SHUTDOWN EVENTS
-# ============================================================================
-
-@app.on_event("startup")
-async def startup_event():
-    """Cargar modelo y preprocessors al iniciar"""
-    try:
-        logger.info("🚀 Iniciando API...")
-        
-        # Cargar preprocessors
-        preprocessor_loader.load_preprocessors(
-            settings.data_preprocessor_path,  # ← CAMBIO
-            settings.feature_engineer_path
-        )
-        
-        # Cargar modelo
-        model_loader.load_model(settings.model_path)
-        
-        logger.info("✓ API lista")
-    except Exception as e:
-        logger.error(f"❌ Error en startup: {e}")
-        raise
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup al cerrar"""
-    logger.info("👋 Cerrando API...")
-
-
-# ============================================================================
-# ENDPOINTS
+# ENDPOINTS (sin cambios)
 # ============================================================================
 
 @app.get("/", tags=["Info"])
@@ -86,7 +96,7 @@ async def root():
         "name": settings.app_name,
         "version": settings.app_version,
         "description": settings.app_description,
-        "model":  model_loader.get_model_name(),
+        "model":   model_loader.get_model_name(),
         "endpoints": {
             "docs": "/docs",
             "health": "/health",
@@ -102,7 +112,7 @@ async def health_check():
     return HealthResponse(
         status="healthy" if (model_loader.is_loaded and preprocessor_loader.is_loaded) else "unhealthy",
         model_loaded=model_loader.is_loaded,
-        preprocessors_loaded=preprocessor_loader.is_loaded,
+        preprocessors_loaded=preprocessor_loader.is_loaded,  # ← Cambiar nombre aquí
         model_name=model_loader.get_model_name(),
         version=settings.app_version
     )
@@ -110,12 +120,8 @@ async def health_check():
 
 @app.post("/predict", response_model=PredictionResponse, tags=["Prediction"])
 async def predict(features: HousingFeatures):
-    """
-    Predice el precio de una vivienda
-    
-    Recibe 13 features originales, aplica preprocessing automáticamente
-    """
-    try:
+    """Predice el precio de una vivienda"""
+    try: 
         # 1.Convertir a DataFrame (features originales)
         X_raw = features.to_dataframe()
         
@@ -149,7 +155,14 @@ async def predict(features: HousingFeatures):
 @app.post("/predict/batch", response_model=BatchPredictionResponse, tags=["Prediction"])
 async def predict_batch(request: BatchPredictionRequest):
     """Predice precios para múltiples viviendas"""
-    try: 
+    try:
+        # Validar que hay instancias
+        if not request.instances:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Lista de instancias no puede estar vacía"
+            )
+        
         # 1.Convertir instancias a DataFrame
         dfs = [instance.to_dataframe() for instance in request.instances]
         X_raw = pd.concat(dfs, ignore_index=True)
@@ -169,6 +182,8 @@ async def predict_batch(request: BatchPredictionRequest):
             model_name=model_loader.get_model_name()
         )
         
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error en batch prediction: {e}", exc_info=True)
         raise HTTPException(
