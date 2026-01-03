@@ -2,7 +2,7 @@
 Script ejecutable para pipeline de preprocesamiento
 
 Flujo: 
-    1.Carga datos divididos (train/test) desde data/processed/
+    1.Carga datos divididos (train/test) desde data/splits/
     2.Carga configuración de preprocessing_config.yaml
     3.Aplica preprocessing (MissingValues, Outliers, Correlation, Scaling)
     4.Aplica feature engineering (opcional)
@@ -58,7 +58,7 @@ def load_config(config_path: str) -> dict:
     return config
 
 
-def load_split_data(data_dir: str = 'data/processed', target_column: str = 'MEDV'):
+def load_split_data(data_dir: str = 'data/splits', target_column: str = 'MEDV'):
     """
     Carga datos ya divididos en train/test
     
@@ -176,7 +176,7 @@ def main():
     parser.add_argument(
         '--input-dir',
         type=str,
-        default='data/processed',
+        default='data/splits',
         help='Directorio con datos divididos (train.csv, test.csv)'
     )
     parser.add_argument(

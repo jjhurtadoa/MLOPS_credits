@@ -79,7 +79,7 @@ def save_data(
     X_test: pd.DataFrame,
     y_train: pd.Series,
     y_test: pd.Series,
-    output_dir: str = 'data/processed',
+    output_dir: str = 'data/splits',
     target_column: str = 'MEDV'
 ) -> None:
     """Guarda datos divididos en CSV"""
@@ -112,7 +112,7 @@ def save_data(
 
 
 def load_processed_data(
-    data_dir: str = 'data/processed',
+    data_dir: str = 'data/splits',
     target_column: str = 'MEDV'
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     """Carga datos ya divididos"""

@@ -131,12 +131,12 @@ $RECYCLE.BIN/
 # ! data/raw/HousingData.csv
 
 # Datos procesados (se regeneran con scripts)
-data/processed/*.csv
+data/splits/*.csv
 data/interim/*.csv
 data/external/*
 
 # Mantener estructura de directorios
-! data/processed/.gitkeep
+! data/splits/.gitkeep
 ! data/interim/.gitkeep
 !data/external/.gitkeep
 

@@ -3,9 +3,7 @@ Script ejecutable para pipeline de carga y división de datos
 """
 
 import argparse
-from pathlib import Path
 
-# ✅ ENTRYPOINT: Aquí SÍ configuramos logging
 from src.utils.logger import setup_logging, get_logger
 from .load_data import load_raw_data, split_data, save_data
 
@@ -17,7 +15,7 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument('--input', type=str, default='data/raw/HousingData.csv')
-    parser.add_argument('--output', type=str, default='data/processed')
+    parser.add_argument('--output', type=str, default='data/splits/')
     parser.add_argument('--test-size', type=float, default=0.2)
     parser.add_argument('--random-state', type=int, default=42)
     parser.add_argument('--target', type=str, default='MEDV')
