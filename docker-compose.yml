@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # ============================================================================
   # API
@@ -30,7 +28,7 @@ services:
   # PROMETHEUS
   # ============================================================================
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.48.0 
     container_name: mlops-prometheus
     ports: 
       - "9090:9090"
@@ -48,7 +46,7 @@ services:
   # GRAFANA
   # ============================================================================
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:10.2.0 
     container_name: mlops-grafana
     ports:
       - "3000:3000"
