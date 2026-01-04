@@ -15,45 +15,41 @@ cv_results:
     - -1
     - 0
   - !!binary |
-    YrtAgq9PI0A=
+    4NaY1uPgIkA=
   cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    OE5e5gYhGkA=
+    moGMAM+IFUA=
   cv_min: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    CryrRwQeCkA=
+    h0g8blAPCkA=
   cv_std: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    89iQk/gsA0A=
-mlflow_run_id: 6ad74c7d911542dea6df2ee3081dc69b
+    R6H++BmMAUA=
+mlflow_run_id: e6055618fd104d989e1c50f99b0b0c90
 model_class: MLPRegressor
 model_module: sklearn.neural_network
 model_name: mlp
 model_path: artifacts\models\mlp_model.pkl
 params:
-  activation: relu
-  hidden_layer_sizes:
-  - 100
-  - 50
   max_iter: 1000
   random_state: 42
 test_metrics:
-  mae: 3.1354193081777435
-  mape: 16.564531673589983
-  r2: 0.6200409422666986
+  mae: 2.5939405154344906
+  mape: 14.347279223137727
+  r2: 0.7357560613013714
   rmse: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    +XYdtk4dFUA=
+    IBqM6LGbEUA=
 train_metrics:
-  mae: 3.119881189839414
-  mape: 15.652312547278846
-  r2: 0.762429704223924
+  mae: 2.994546664367538
+  mape: 14.859141065914208
+  r2: 0.7826629752651529
   rmse: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    UzWuSP8rEkA=
-trained_at: '2025-12-31T16:34:58.775109'
+    Hm86cH1hEUA=
+trained_at: '2026-01-03T22:59:37.378658'

@@ -28,14 +28,13 @@ cv_results:
   - *id001
   - !!binary |
     HLcXuQC+3j8=
-mlflow_run_id: 19ee3a4704cb41caaac278f98a419e83
+mlflow_run_id: b287d48bd8524079996b5fcf832fea08
 model_class: ElasticNet
 model_module: sklearn.linear_model
 model_name: elastic_net
 model_path: artifacts\models\elastic_net_model.pkl
 params:
-  alpha: 1.0
-  l1_ratio: 0.5
+  max_iter: 10000
   random_state: 42
 test_metrics:
   mae: 3.4929091328828688
@@ -53,4 +52,4 @@ train_metrics:
   - *id001
   - !!binary |
     9pEVexO4FkA=
-trained_at: '2025-12-31T16:34:53.270347'
+trained_at: '2026-01-03T22:59:30.458074'

@@ -9,7 +9,6 @@ El módulo `data` realiza la partición train/test antes de cualquier transforma
 ## 📂 Estructura
 ```
 src/data/
-├── __init__.py           # paquete
 ├── load_data.py          # Funciones principales
 └── run_load_data.py      # Script ejecutable
 ```

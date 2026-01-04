@@ -2,13 +2,13 @@
 Script ejecutable para entrenamiento de modelos
 
 Flujo:  
-    1. Cargar configuración
-    2. Cargar datos procesados
-    3. Entrenar modelos baseline (RandomForest, XGBoost, LightGBM, etc.)
-    4. Comparar resultados
-    5. Seleccionar mejor modelo
-    6. (Opcional) Optimizar hiperparámetros del ganador con Optuna
-    7. Guardar artifacts
+    1.Cargar configuración
+    2.Cargar datos procesados
+    3.Entrenar modelos baseline (RandomForest, XGBoost, LightGBM, etc.)
+    4.Comparar resultados
+    5.Seleccionar mejor modelo
+    6.(Opcional) Optimizar hiperparámetros del ganador con Optuna
+    7.Guardar artifacts
 
 Uso:
     # Baseline (rápido - ~5 min)
@@ -21,12 +21,13 @@ Uso:
     python -m src.train.run_train --models random_forest xgboost
     
     # Config personalizada
-    python -m src. train.run_train --config custom_config.yaml
+    python -m src.train.run_train --config custom_config.yaml
 """
 
 import argparse
 import yaml
 import sys
+import numpy as np
 from pathlib import Path
 
 from src.utils.logger import setup_logging, get_logger
@@ -34,7 +35,29 @@ from src.train.train_model import ModelTrainer
 
 logger = get_logger(__name__)
 
-
+def convert_numpy_to_native(obj):
+    """
+    Convierte objetos numpy a tipos nativos de Python para serialización YAML
+    
+    Args:
+        obj:  Objeto a convertir (puede ser dict, list, numpy type, etc.)
+        
+    Returns:
+        Objeto con tipos nativos de Python
+    """
+    if isinstance(obj, dict):
+        return {key: convert_numpy_to_native(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy_to_native(item) for item in obj]
+    elif isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    else:
+        return obj
+    
 def load_config(config_path: str) -> dict:
     """
     Carga configuración desde YAML
@@ -127,7 +150,7 @@ def main():
     
     try:
         # ================================================================
-        # 1. CARGAR CONFIGURACIÓN
+        # 1.CARGAR CONFIGURACIÓN
         # ================================================================
         
         config = load_config(args.config)
@@ -139,19 +162,19 @@ def main():
             config['models'] = models_to_train
         
         # ================================================================
-        # 2. INICIALIZAR TRAINER
+        # 2.INICIALIZAR TRAINER
         # ================================================================
         
         trainer = ModelTrainer(config)
         
         # ================================================================
-        # 3. CARGAR DATOS
+        # 3.CARGAR DATOS
         # ================================================================
         
         X_train, X_test, y_train, y_test = trainer.load_data(data_dir=args.data_dir)
         
         # ================================================================
-        # 4. ENTRENAR MODELOS BASELINE
+        # 4.ENTRENAR MODELOS BASELINE
         # ================================================================
         
         logger.info("\n" + "="*60)
@@ -161,7 +184,7 @@ def main():
         trainer.train_all_models(X_train, y_train, X_test, y_test)
         
         # ================================================================
-        # 5. COMPARAR MODELOS
+        # 5.COMPARAR MODELOS
         # ================================================================
         
         comparison_df = trainer.compare_models()
@@ -173,7 +196,7 @@ def main():
         logger.info(f"\n💾 Comparación baseline guardada en:  {comparison_path}")
         
         # ================================================================
-        # 6. MEJOR MODELO BASELINE
+        # 6.MEJOR MODELO BASELINE
         # ================================================================
         
         best_name, best_model, best_metadata = trainer.get_best_model(metric='test_rmse')
@@ -190,14 +213,14 @@ def main():
         joblib.dump(best_model, baseline_model_path)
         
         with open(baseline_metadata_path, 'w') as f:
-            yaml.dump(best_metadata, f, default_flow_style=False)
-        
+            yaml.dump(convert_numpy_to_native(best_metadata), f, default_flow_style=False)
+
         logger.info(f"\n💾 Modelo baseline guardado:")
         logger.info(f"  - Modelo: {baseline_model_path}")
         logger.info(f"  - Metadata: {baseline_metadata_path}")
         
         # ================================================================
-        # 7. OPTIMIZACIÓN (OPCIONAL)
+        # 7.OPTIMIZACIÓN (OPCIONAL)
         # ================================================================
         
         final_model = best_model
@@ -253,7 +276,7 @@ def main():
                 
                 logger.info(f"\n✅ Optimización completada")
                 logger.info(f"  - Baseline RMSE: {best_metadata['test_metrics']['rmse']:.4f}")
-                logger. info(f"  - Optimizado RMSE: {optimized_metrics['test_rmse']:. 4f}")
+                logger.info(f"  - Optimizado RMSE: {optimized_metrics['test_rmse']:.4f}")
                 logger.info(f"  - Mejora: {final_metadata['improvement']:.4f} ({final_metadata['improvement']/best_metadata['test_metrics']['rmse']*100:.1f}%)")
                 
                 # Guardar modelo optimizado separado
@@ -263,7 +286,7 @@ def main():
                 joblib.dump(optimized_model, optimized_model_path)
                 
                 with open(optimized_metadata_path, 'w') as f:
-                    yaml.dump(final_metadata, f, default_flow_style=False)
+                    yaml.dump(convert_numpy_to_native(final_metadata), f, default_flow_style=False)
                 
                 logger.info(f"\n💾 Modelo optimizado guardado:")
                 logger.info(f"  - Modelo: {optimized_model_path}")
@@ -279,16 +302,16 @@ def main():
                 logger.warning("  Usando modelo baseline como final")
         
         # ================================================================
-        # 8. GUARDAR MODELO FINAL (BEST_MODEL)
+        # 8.GUARDAR MODELO FINAL (BEST_MODEL)
         # ================================================================
         
-        best_model_path = output_dir / 'best_model. pkl'
+        best_model_path = output_dir / 'best_model.pkl'
         best_metadata_path = output_dir / 'best_model_metadata.yaml'
         
         joblib.dump(final_model, best_model_path)
         
         with open(best_metadata_path, 'w') as f:
-            yaml.dump(final_metadata, f, default_flow_style=False)
+            yaml.dump(convert_numpy_to_native(final_metadata), f, default_flow_style=False)
         
         logger.info(f"\n💾 Modelo final guardado como 'best_model':")
         logger.info(f"  - Modelo: {best_model_path}")
@@ -296,25 +319,25 @@ def main():
         logger.info(f"  - Tipo: {'Optimizado' if args.optimize and 'optimized' in final_model_name else 'Baseline'}")
         
         # ================================================================
-        # 9. RESUMEN FINAL
+        # 9.RESUMEN FINAL
         # ================================================================
         
-        logger. info("\n" + "="*60)
+        logger.info("\n" + "="*60)
         logger.info("✅ TRAINING PIPELINE - COMPLETADO")
         logger.info("="*60)
         
         logger.info(f"\n📊 Resumen:")
-        logger.info(f"  - Modelos baseline entrenados: {len(trainer. models_)}")
+        logger.info(f"  - Modelos baseline entrenados: {len(trainer.models_)}")
         logger.info(f"  - Mejor modelo baseline: {best_name}")
         
         if args.optimize and 'optimized' in final_model_name:
             logger.info(f"  - Modelo final: {final_model_name}")
             logger.info(f"  - RMSE baseline: {best_metadata['test_metrics']['rmse']:.4f}")
             logger.info(f"  - RMSE optimizado: {final_metadata['test_metrics']['rmse']:.4f}")
-            logger. info(f"  - Mejora: {final_metadata['improvement']:.4f} ({final_metadata['improvement']/best_metadata['test_metrics']['rmse']*100:.1f}%)")
+            logger.info(f"  - Mejora: {final_metadata['improvement']:.4f} ({final_metadata['improvement']/best_metadata['test_metrics']['rmse']*100:.1f}%)")
         else:
             logger.info(f"  - Test RMSE: {final_metadata['test_metrics']['rmse']:.4f}")
-            logger.info(f"  - Test R²: {final_metadata['test_metrics']['r2']:. 4f}")
+            logger.info(f"  - Test R²: {final_metadata['test_metrics']['r2']:.4f}")
         
         logger.info(f"\n📁 Artifacts generados:")
         logger.info(f"  - Modelos baseline: {output_dir}/*_model.pkl")
@@ -326,7 +349,7 @@ def main():
         logger.info(f"  - MLflow: {config['training']['mlflow']['tracking_uri']}")
         
         logger.info(f"\n🔜 Siguiente paso:")
-        logger.info(f"  python -m src. evaluate.run_evaluate --model {best_model_path}")
+        logger.info(f"  python -m src.evaluate.run_evaluate --model {best_model_path}")
         logger.info(f"  mlflow ui --backend-store-uri {config['training']['mlflow']['tracking_uri']}")
         
         return 0
@@ -335,7 +358,7 @@ def main():
         logger.error(f"\n❌ ERROR:  Archivo no encontrado")
         logger.error(f"{str(e)}")
         logger.info(f"\n💡 Asegúrate de ejecutar primero:")
-        logger.info(f"  python -m src. preprocess.run_preprocess")
+        logger.info(f"  python -m src.preprocess.run_preprocess")
         return 1
         
     except Exception as e: 

@@ -6,7 +6,7 @@ import optuna
 import mlflow
 import numpy as np
 from sklearn.model_selection import cross_val_score
-from . train_model import load_model_class
+from .train_model import load_model_class
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -51,7 +51,7 @@ class ModelOptimizer:
                 'verbose': -1
             }
         
-        # ...  más modelos según necesites
+        # ...más modelos según necesites
         
         else:
             raise ValueError(f"Optimización no implementada para {self.model_name}")
@@ -83,7 +83,7 @@ class ModelOptimizer:
         # Log en MLflow (opcional)
         with mlflow.start_run(nested=True, run_name=f"optuna_trial_{trial.number}"):
             mlflow.log_params(params)
-            mlflow. log_metric('cv_rmse', rmse)
+            mlflow.log_metric('cv_rmse', rmse)
         
         return rmse
     
@@ -156,5 +156,5 @@ class ModelOptimizer:
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
-        joblib. dump(self.best_model, output_path)
+        joblib.dump(self.best_model, output_path)
         logger.info(f"✅ Modelo optimizado guardado:  {output_path}")

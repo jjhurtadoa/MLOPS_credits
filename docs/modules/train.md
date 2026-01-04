@@ -134,10 +134,10 @@ Solo con flag `--optimize`.
 
 ### **¿Qué hace?**
 
-1. Identifica el mejor modelo del baseline (ej: XGBoost) 
-2. Busca mejores hiperparámetros con Bayesian Optimization  
-3. Entrena modelo final con parámetros óptimos  
-4. Compara baseline vs optimizado  
+1.Identifica el mejor modelo del baseline (ej: XGBoost) 
+2.Busca mejores hiperparámetros con Bayesian Optimization  
+3.Entrena modelo final con parámetros óptimos  
+4.Compara baseline vs optimizado  
 
 
 ---

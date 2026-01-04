@@ -1,0 +1,24 @@
+cv_results:
+  cv_max: 5.451478762947099
+  cv_mean: 4.296871269093691
+  cv_min: 3.3189035443759445
+  cv_std: 0.7107144451943596
+mlflow_run_id: ad31fc14b0bb4c669a391e9328e37cac
+model_class: XGBRegressor
+model_module: xgboost
+model_name: xgboost
+model_path: artifacts\models\xgboost_model.pkl
+params:
+  n_jobs: -1
+  random_state: 42
+test_metrics:
+  mae: 2.039425713408227
+  mape: 10.956634498603595
+  r2: 0.8961329213512957
+  rmse: 2.7598851104928785
+train_metrics:
+  mae: 0.01307925894708916
+  mape: 0.07187381644075212
+  r2: 0.9999959570231639
+  rmse: 0.018741055449649026
+trained_at: '2026-01-03T22:59:08.648562'

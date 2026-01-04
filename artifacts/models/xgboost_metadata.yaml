@@ -15,46 +15,41 @@ cv_results:
     - -1
     - 0
   - !!binary |
-    Lp5sDK22FEA=
+    CsnmclDOFUA=
   cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    s7V1nRdeD0A=
+    hoSfBf8vEUA=
   cv_min: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    u9HvXSkDCUA=
+    pWItTR2NCkA=
   cv_std: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    ayBPeB8H5j8=
-mlflow_run_id: 071ceeb01b4b44acb62cf00484204cd1
+    JfJcOCy+5j8=
+mlflow_run_id: ad31fc14b0bb4c669a391e9328e37cac
 model_class: XGBRegressor
 model_module: xgboost
 model_name: xgboost
 model_path: artifacts\models\xgboost_model.pkl
 params:
-  colsample_bytree: 0.8
-  learning_rate: 0.1
-  max_depth: 6
-  n_estimators: 100
   n_jobs: -1
   random_state: 42
-  subsample: 0.8
 test_metrics:
-  mae: 1.9512814222597608
-  mape: 10.591333147244896
-  r2: 0.9013584220782489
+  mae: 2.039425713408227
+  mape: 10.956634498603595
+  r2: 0.8961329213512957
   rmse: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    ZgyErDqEBUA=
+    KkYSpT4UBkA=
 train_metrics:
-  mae: 0.2688018279500527
-  mape: 1.4091426437625831
-  r2: 0.9985444221803769
+  mae: 0.01307925894708916
+  mape: 0.07187381644075212
+  r2: 0.9999959570231639
   rmse: !!python/object/apply:numpy._core.multiarray.scalar
   - *id001
   - !!binary |
-    av2yYCTC1j8=
-trained_at: '2025-12-31T16:34:31.227658'
+    Srz+8Nowkz8=
+trained_at: '2026-01-03T22:59:08.648562'

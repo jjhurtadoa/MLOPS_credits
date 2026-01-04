@@ -28,13 +28,12 @@ cv_results:
   - *id001
   - !!binary |
     BaOJNz2l2j8=
-mlflow_run_id: 26b6771c020e4c358d48037344d49f92
+mlflow_run_id: d0cf2edc7f1e45849d5e7fcd9d055dac
 model_class: Ridge
 model_module: sklearn.linear_model
 model_name: ridge
 model_path: artifacts\models\ridge_model.pkl
 params:
-  alpha: 1.0
   random_state: 42
 test_metrics:
   mae: 2.999402532562531
@@ -52,4 +51,4 @@ train_metrics:
   - *id001
   - !!binary |
     ieIopro7EkA=
-trained_at: '2025-12-31T16:34:49.158354'
+trained_at: '2026-01-03T22:59:25.874694'

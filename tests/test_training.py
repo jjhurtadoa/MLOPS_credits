@@ -68,7 +68,7 @@ def minimal_config(tmp_path):
         'models': {
             'random_forest': {
                 'enabled': True,
-                'module': 'sklearn.ensemble',        # ← NUEVO:  Requerido para import dinámico
+                'module': 'sklearn.ensemble',        
                 'class':   'RandomForestRegressor',
                 'params': {
                     'n_estimators': 10,  # Pocos para tests rápidos

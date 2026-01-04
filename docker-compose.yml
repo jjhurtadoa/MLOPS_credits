@@ -1,21 +1,75 @@
 version: "3.8"
 
 services:
+  # ============================================================================
+  # API
+  # ============================================================================
   api:
     build:
       context: .
       dockerfile: Dockerfile
     image: mlops-credits-api:local
+    container_name: mlops-api
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
     volumes:
-      - ./artifacts/models:/app/artifacts/models:ro    # montar modelo durante desarrollo
+      - ./artifacts/models:/app/artifacts/models:ro
       - ./artifacts/preprocessors:/app/artifacts/preprocessors:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
-      timeout: 10s
-      retries: 3
+      timeout:  10s
+      retries:  3
     restart: unless-stopped
+    networks:
+      - monitoring
+
+  # ============================================================================
+  # PROMETHEUS
+  # ============================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: mlops-prometheus
+    ports: 
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command: 
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    restart: unless-stopped
+    networks: 
+      - monitoring
+
+  # ============================================================================
+  # GRAFANA
+  # ============================================================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: mlops-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    restart:  unless-stopped
+    networks: 
+      - monitoring
+    depends_on:
+      - prometheus
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:

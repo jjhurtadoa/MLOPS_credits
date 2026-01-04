@@ -254,11 +254,25 @@ class ModelTrainer:
             return None
         
         # Parámetros
-        params = model_config.get('params', {})
+        # copy params so we can inject library-specific options without mutating config
+        params = dict(model_config.get('params', {}))
         
+        # Prepare model_dir early (used by CatBoost train_dir)
+        model_dir = Path(self.config['training']['model_dir'])
+        model_dir.mkdir(parents=True, exist_ok=True)
+        
+        # If using CatBoost, ensure it writes its train_dir inside artifacts and doesn't try to create
+        # a folder in the CWD. Inject train_dir and silence logging.
+        if module_name and module_name.startswith('catboost') or model_name.lower() == 'catboost':
+            catboost_dir = model_dir / 'catboost_info'
+            catboost_dir.mkdir(parents=True, exist_ok=True)
+            params.setdefault('train_dir', str(catboost_dir))
+            # prefer quiet training in batch runs
+            params.setdefault('logging_level', 'Silent')
+
         # Iniciar MLflow run
         run_name = f"{self.config['training']['mlflow']['run_name_prefix']}_{model_name}"
-        
+
         with mlflow.start_run(run_name=run_name):
             # Log params
             mlflow.log_params(params)
@@ -267,47 +281,45 @@ class ModelTrainer:
             mlflow.log_param('n_features', X_train.shape[1])
             mlflow.log_param('n_train_samples', X_train.shape[0])
             mlflow.log_param('n_test_samples', X_test.shape[0])
-            
+
             # Crear modelo
             model = model_class(**params)
-            
+
             # Cross-validation
             cv_results = self.cross_validate_model(model, X_train, y_train)
             for metric_name, metric_value in cv_results.items():
                 mlflow.log_metric(metric_name, metric_value)
-            
+
             # Entrenar
             logger.info(f"  Entrenando en train set completo...")
             model.fit(X_train, y_train)
-            
+
             # Predicciones
             y_train_pred = model.predict(X_train)
             y_test_pred = model.predict(X_test)
-            
+
             # Métricas train
             train_metrics = self.calculate_metrics(y_train, y_train_pred)
             for metric_name, metric_value in train_metrics.items():
                 mlflow.log_metric(f'train_{metric_name}', metric_value)
-            
+
             # Métricas test
             test_metrics = self.calculate_metrics(y_test, y_test_pred)
             for metric_name, metric_value in test_metrics.items():
                 mlflow.log_metric(f'test_{metric_name}', metric_value)
-            
+
             # Log modelo
             mlflow.sklearn.log_model(
                 model, 
                 artifact_path="model",
                 registered_model_name=f"boston_housing_{model_name}"
             )
-            
+
             # Guardar modelo localmente
-            model_dir = Path(self.config['training']['model_dir'])
-            model_dir.mkdir(parents=True, exist_ok=True)
-            
+            # model_dir already created above
             model_path = model_dir / f'{model_name}_model.pkl'
             joblib.dump(model, model_path)
-            
+
             # Metadata
             metadata = {
                 'model_name': model_name,
@@ -321,27 +333,28 @@ class ModelTrainer:
                 'mlflow_run_id': mlflow.active_run().info.run_id,
                 'trained_at': datetime.now().isoformat()
             }
-            
+
             # Log metadata
             metadata_path = model_dir / f'{model_name}_metadata.yaml'
+            # Write metadata (original behavior)
             with open(metadata_path, 'w') as f:
                 yaml.dump(metadata, f, default_flow_style=False)
-            
+
             mlflow.log_artifact(str(metadata_path))
-            
+
             # Logging
             logger.info(f"\n📊 RESULTADOS - {model_name.upper()}")
             logger.info(f"  Train:")
             for metric, value in train_metrics.items():
                 logger.info(f"    - {metric.upper()}: {value:.4f}")
-            
+
             logger.info(f"  Test:")
             for metric, value in test_metrics.items():
                 logger.info(f"    - {metric.upper()}: {value:.4f}")
-            
+
             logger.info(f"  Cross-Validation:")
             logger.info(f"    - Mean RMSE: {cv_results['cv_mean']:.4f} ± {cv_results['cv_std']:.4f}")
-            
+
             logger.info(f"\n💾 Modelo guardado:")
             logger.info(f"  - Local: {model_path}")
             logger.info(f"  - MLflow Run ID: {mlflow.active_run().info.run_id}")

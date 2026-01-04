@@ -65,7 +65,7 @@ feature_processing:
 
 feature_engineering: # Generación de nuevas variables predictoras
   domain_features: true # Activa cálculos específicos del dominio 
-  interactions: []      # Cruce de variables (ej. X1 * X2)
+  interactions: []      # Cruce de variables (ej.X1 * X2)
 
 ```
 

@@ -401,7 +401,7 @@ cp preprocessing_config.yaml preprocessing_no_log.yaml
 ### 1.EDA → Generar `preprocessing_config.yaml`
 ```python
 # En notebooks/eda.ipynb
-# ... análisis ...
+# ...análisis ...
 # Generar config basado en hallazgos
 with open('../src/configs/preprocessing_config.yaml', 'w') as f:
     yaml.dump(eda_config, f, default_flow_style=False)

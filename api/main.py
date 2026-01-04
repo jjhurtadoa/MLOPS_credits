@@ -2,7 +2,9 @@
 FastAPI - Boston Housing Price Prediction API
 """
 
-from fastapi import FastAPI, HTTPException, status
+from pathlib import Path
+import sys
+from fastapi import FastAPI, HTTPException, status, Request  # ← AGREGAR Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
@@ -19,30 +21,48 @@ from api.schemas import (
 )
 from api.utils import model_loader, preprocessor_loader
 
+# ============================================================================
+# NUEVAS IMPORTS PARA RATE LIMITING Y PROMETHEUS
+# ============================================================================
+from prometheus_fastapi_instrumentator import Instrumentator
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+
+# ============================================================================
+# LOGGING
+# ============================================================================
+
+# Crear carpeta de logs
+Path("artifacts/logs").mkdir(parents=True, exist_ok=True)
+
 # Configurar logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler('artifacts/logs/api.log', encoding='utf-8')
+    ]
 )
 logger = logging.getLogger(__name__)
 
+# ============================================================================
+# RATE LIMITER
+# ============================================================================
+
+limiter = Limiter(key_func=get_remote_address)
 
 # ============================================================================
-# LIFESPAN CONTEXT (reemplaza on_event)
+# LIFESPAN CONTEXT
 # ============================================================================
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Lifespan context manager para startup/shutdown
-    
-    Se ejecuta: 
-    - Al inicio:  carga modelo y preprocessors
-    - Al final: cleanup (si fuera necesario)
-    """
+    """Lifespan context manager para startup/shutdown"""
     # STARTUP
     try:
-        logger.info("🚀 Iniciando API...")
+        logger.info("[OK] Iniciando API...")
         
         # Cargar preprocessors
         preprocessor_loader.load_preprocessors(
@@ -53,16 +73,15 @@ async def lifespan(app: FastAPI):
         # Cargar modelo
         model_loader.load_model("artifacts/models/best_model.pkl")
         
-        logger.info("✓ API lista")
+        logger.info("[OK] API lista")
     except Exception as e:
-        logger.error(f"❌ Error en startup: {e}")
+        logger.error(f"[ERROR] Error en startup: {e}")
         raise
     
-    # Yield control to app
     yield
     
-    # SHUTDOWN (si fuera necesario)
-    logger.info("👋 Cerrando API...")
+    # SHUTDOWN
+    logger.info("[INFO] Cerrando API...")
 
 
 # Crear app con lifespan
@@ -72,10 +91,20 @@ app = FastAPI(
     version=settings.app_version,
     docs_url="/docs",
     redoc_url="/redoc",
-    lifespan=lifespan  # ← Nuevo
+    lifespan=lifespan
 )
 
+# ============================================================================
+# RATE LIMITER
+# ============================================================================
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# ============================================================================
 # CORS
+# ============================================================================
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -84,9 +113,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ============================================================================
+# PROMETHEUS
+# ============================================================================
+
+Instrumentator().instrument(app).expose(app)
+logger.info("[OK] Prometheus metrics habilitado en /metrics")
 
 # ============================================================================
-# ENDPOINTS (sin cambios)
+# ENDPOINTS
 # ============================================================================
 
 @app.get("/", tags=["Info"])
@@ -101,7 +136,8 @@ async def root():
             "docs": "/docs",
             "health": "/health",
             "predict": "/predict",
-            "batch_predict": "/predict/batch"
+            "batch_predict": "/predict/batch",
+            "metrics": "/metrics"
         }
     }
 
@@ -112,16 +148,21 @@ async def health_check():
     return HealthResponse(
         status="healthy" if (model_loader.is_loaded and preprocessor_loader.is_loaded) else "unhealthy",
         model_loaded=model_loader.is_loaded,
-        preprocessors_loaded=preprocessor_loader.is_loaded,  # ← Cambiar nombre aquí
+        preprocessors_loaded=preprocessor_loader.is_loaded,
         model_name=model_loader.get_model_name(),
         version=settings.app_version
     )
 
 
 @app.post("/predict", response_model=PredictionResponse, tags=["Prediction"])
-async def predict(features: HousingFeatures):
-    """Predice el precio de una vivienda"""
-    try: 
+@limiter.limit("10/minute")  # ← RATE LIMITING
+async def predict(request: Request, features: HousingFeatures):  # ← request:  Request
+    """
+    Predice el precio de una vivienda
+    
+    **Rate limit:** 10 requests por minuto por IP
+    """
+    try:  
         # 1.Convertir a DataFrame (features originales)
         X_raw = features.to_dataframe()
         
@@ -132,45 +173,50 @@ async def predict(features: HousingFeatures):
         
         logger.info(f"Features procesadas: {X_processed.columns.tolist()}")
         
-        # 3.Predecir
+        # 3.Predecir (IGUAL QUE TU CÓDIGO ORIGINAL)
         model = model_loader.load_model(settings.model_path)
         prediction = model.predict(X_processed)[0]
         
-        logger.info(f"Predicción exitosa: {prediction:.2f}")
+        logger.info(f"Prediccion exitosa: {prediction:.2f}")
         
         return PredictionResponse(
-            predicted_price=float(prediction),
+            predicted_price=float(prediction),  # ← predicted_price (como tu schema)
             model_name=model_loader.get_model_name(),
             model_version=settings.app_version
         )
         
-    except Exception as e:
-        logger.error(f"Error en predicción: {e}", exc_info=True)
+    except Exception as e: 
+        logger.error(f"Error en prediccion: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error en predicción: {str(e)}"
+            detail=f"Error en prediccion: {str(e)}"
         )
 
 
 @app.post("/predict/batch", response_model=BatchPredictionResponse, tags=["Prediction"])
-async def predict_batch(request: BatchPredictionRequest):
-    """Predice precios para múltiples viviendas"""
+@limiter.limit("5/minute")  # ← RATE LIMITING (más estricto)
+async def predict_batch(request: Request, batch_request: BatchPredictionRequest):  # ← request: Request
+    """
+    Predice precios para múltiples viviendas
+    
+    **Rate limit:** 5 requests por minuto por IP
+    """
     try:
         # Validar que hay instancias
-        if not request.instances:
+        if not batch_request.instances:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="Lista de instancias no puede estar vacía"
+                detail="Lista de instancias no puede estar vacia"
             )
         
         # 1.Convertir instancias a DataFrame
-        dfs = [instance.to_dataframe() for instance in request.instances]
+        dfs = [instance.to_dataframe() for instance in batch_request.instances]
         X_raw = pd.concat(dfs, ignore_index=True)
         
         # 2.Aplicar preprocessing
         X_processed = preprocessor_loader.preprocess(X_raw)
         
-        # 3.Predecir
+        # 3.Predecir (IGUAL QUE TU CÓDIGO ORIGINAL)
         model = model_loader.load_model(settings.model_path)
         predictions = model.predict(X_processed)
         
@@ -198,16 +244,16 @@ async def predict_batch(request: BatchPredictionRequest):
 
 @app.exception_handler(ValueError)
 async def value_error_handler(request, exc):
-    """Handler para errores de validación"""
+    """Handler para errores de validacion"""
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={"detail":  str(exc)}
+        content={"detail": str(exc)}
     )
 
 
 @app.exception_handler(Exception)
 async def generic_exception_handler(request, exc):
-    """Handler genérico"""
+    """Handler generico"""
     logger.error(f"Error no manejado: {exc}", exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
