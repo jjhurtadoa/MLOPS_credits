@@ -13,7 +13,7 @@ Todas las clases son compatibles con sklearn Pipeline y persistibles.
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from typing import List, Dict, Optional, Union, Literal
+from typing import List, Dict,  Union, Literal
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import RobustScaler, StandardScaler
@@ -438,13 +438,7 @@ class DataPreprocessor(BaseEstimator, TransformerMixin):
         outlier_handler_ (OutlierHandler): Handler de outliers fitted
         correlation_reducer_ (CorrelationReducer): Reducer fitted
         scaler_ (FeatureScaler): Scaler fitted
-        
-    Example:
-        >>> from src.utils.config_loader import load_config
-        >>> config = load_config('src/configs/preprocessing_config.yaml')
-        >>> preprocessor = DataPreprocessor(config['feature_processing'])
-        >>> X_train_processed = preprocessor.fit_transform(X_train)
-        >>> X_test_processed = preprocessor.transform(X_test)
+
     """
     
     def __init__(self, config: Dict):

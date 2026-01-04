@@ -26,7 +26,7 @@ def main():
     
     args = parser.parse_args()
     
-    # ✅ CONFIGURAR LOGGING UNA SOLA VEZ (en el entrypoint)
+    # CONFIGURAR LOGGING UNA SOLA VEZ (en el entrypoint)
     import logging
     log_level = getattr(logging, args.log_level.upper())
     setup_logging(level=log_level, log_file=args.log_file)

@@ -54,11 +54,5 @@ feature_processing:
     - LSTAT
     - MEDV
   scaler: RobustScaler
-model_selection:
-  candidates:
-  - RandomForestRegressor
-  - XGBRegressor
-  - LGBMRegressor
 feature_engineering:
   domain_features: true
-  interactions: []

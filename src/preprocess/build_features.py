@@ -41,14 +41,8 @@ class InteractionFeatureCreator(BaseEstimator, TransformerMixin):
     Attributes:
         interactions (list): Lista de interacciones a crear
         feature_names_out_ (list): Nombres de features generadas
-        
-    Example:
-        >>> interactions = [
-        ...{'type': 'product', 'features': ['RM', 'AGE'], 'name': 'RM_x_AGE'},
-        ...{'type': 'ratio', 'features': ['LSTAT', 'RM'], 'name': 'LSTAT_per_RM'}
-        ...]
-        >>> creator = InteractionFeatureCreator(interactions)
-        >>> X_new = creator.fit_transform(X)
+
+]
     """
     
     def __init__(self, interactions:  Optional[List[Dict]] = None):
@@ -414,12 +408,12 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         
     Example:
         >>> config = {
-        ...'interactions': [...],
+        ...'interactions': [        ...{'type': 'product', 'features': ['RM', 'AGE'], 'name': 'RM_x_AGE'},
+        ...{'type': 'ratio', 'features': ['LSTAT', 'RM'], 'name': 'LSTAT_per_RM'}
+        ...],
         ...'domain_features': True,
         ...'polynomial':  {'degree': 2, 'features': ['RM', 'LSTAT']}
         ...}
-        >>> engineer = FeatureEngineer(config)
-        >>> X_engineered = engineer.fit_transform(X_train)
     """
     
     def __init__(self, config:  Optional[Dict] = None):

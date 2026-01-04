@@ -102,7 +102,7 @@ def save_data(
     train_df.to_csv(train_path, index=False)
     test_df.to_csv(test_path, index=False)
     
-    # ✅ Corrección del error de formato
+    # Corrección del error de formato
     train_size_kb = train_path.stat().st_size / 1024
     test_size_kb = test_path.stat().st_size / 1024
     
@@ -111,7 +111,7 @@ def save_data(
     logger.info(f"✓ Columnas guardadas: {list(train_df.columns)}")
 
 
-def load_processed_data(
+def load_split_data(
     data_dir: str = 'data/splits',
     target_column: str = 'MEDV'
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:

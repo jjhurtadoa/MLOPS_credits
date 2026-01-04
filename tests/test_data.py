@@ -13,10 +13,10 @@ from src.data.load_data import (
     load_raw_data,
     split_data,
     save_data,
-    load_processed_data
+    load_split_data
 )
 
-# ✅ AGREGAR: Configurar logging para tests
+
 from src.utils.logger import setup_logging, reset_logging
 
 
@@ -75,7 +75,7 @@ def temp_data_dir():
     shutil.rmtree(temp_dir)
 
 
-# ✅ AGREGAR: Fixture para datos reales (opcional)
+# Fixture para datos reales (opcional)
 @pytest.fixture(scope="session")
 def real_boston_data():
     """
@@ -88,13 +88,11 @@ def real_boston_data():
     return None
 
 
-# Tu código de tests existente...
-# (load_raw_data, split_data, save_data, load_processed_data tests)
-
 
 # ============================================================================
-# ✅ AGREGAR:  TESTS DE EDGE CASES
+# TESTS EDGE CASES
 # ============================================================================
+
 
 def test_split_data_single_row():
     """Test:  Split con solo una fila (edge case)"""
@@ -138,7 +136,7 @@ def test_load_data_with_missing_values(temp_data_dir):
 
 
 # ============================================================================
-# ✅ AGREGAR: TESTS PARAMETRIZADOS
+# TESTS PARAMETRIZADOS
 # ============================================================================
 
 @pytest.mark.parametrize("test_size,expected_train_pct", [
@@ -161,7 +159,7 @@ def test_split_sizes(sample_boston_data, test_size, expected_train_pct):
 
 
 # ============================================================================
-# ✅ AGREGAR: TESTS DE PERFORMANCE (opcional)
+# TESTS DE PERFORMANCE 
 # ============================================================================
 
 @pytest.mark.slow
@@ -185,7 +183,7 @@ def test_split_large_dataset():
 
 
 # ============================================================================
-# ✅ AGREGAR: TESTS CON DATOS REALES
+# TESTS CON DATOS REALES
 # ============================================================================
 
 @pytest.mark.integration
@@ -210,8 +208,27 @@ def test_with_real_data(real_boston_data):
     assert len(train_indices.intersection(test_indices)) == 0
 
 
-# ============================================================================
-# ✅ AGREGAR: CONFIGURACIÓN DE PYTEST
-# ============================================================================
+def test_load_split_data_roundtrip(sample_boston_data, temp_data_dir):
+    """Guarda splits y los carga con `load_split_data`, verificando igualdad."""
+    # Generar split
+    X_train, X_test, y_train, y_test = split_data(sample_boston_data, random_state=42)
 
-# Crear archivo:  pytest.ini en la raíz del proyecto
+    # Guardar en directorio temporal
+    save_data(X_train, X_test, y_train, y_test, output_dir=temp_data_dir)
+
+    # Cargar usando la función a testear
+    X_t, X_te, y_t, y_te = load_split_data(data_dir=temp_data_dir)
+
+    # Comparar shapes y columnas
+    assert X_t.shape == X_train.shape
+    assert X_te.shape == X_test.shape
+    assert list(X_t.columns) == list(X_train.columns)
+    assert list(X_te.columns) == list(X_test.columns)
+
+    # Comparar contenido (reseteando índices)
+    pd.testing.assert_frame_equal(X_t.reset_index(drop=True), X_train.reset_index(drop=True))
+    pd.testing.assert_frame_equal(X_te.reset_index(drop=True), X_test.reset_index(drop=True))
+    pd.testing.assert_series_equal(y_t.reset_index(drop=True), y_train.reset_index(drop=True))
+    pd.testing.assert_series_equal(y_te.reset_index(drop=True), y_test.reset_index(drop=True))
+
+

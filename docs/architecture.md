@@ -29,23 +29,23 @@
 
 ## 🔄 Flujo de MLOps
 
-### 1. **Data Ingestion**
+### 1.**Data Ingestion**
 - Source:  CSV/Database
 - Validación de esquema
 - Versionado de datos
 
-### 2. **Training Pipeline**
+### 2.**Training Pipeline**
 - Feature engineering
 - Model training
 - Experiment tracking (MLflow)
 - Model validation
 
-### 3. **Model Serving**
+### 3.**Model Serving**
 - REST API (FastAPI)
 - Docker containerization
 - Load balancing
 
-### 4. **Monitoring**
+### 4.**Monitoring**
 - Drift detection
 - Performance metrics
 - Alerting system

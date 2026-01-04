@@ -24,6 +24,7 @@ import sys
 from src.utils.logger import setup_logging, get_logger
 from src.preprocess.preprocessing import DataPreprocessor
 from src.preprocess.build_features import FeatureEngineer
+from src.data import load_split_data
 
 logger = get_logger(__name__)
 
@@ -56,57 +57,6 @@ def load_config(config_path: str) -> dict:
     logger.debug(f"  Secciones: {list(config.keys())}")
     
     return config
-
-
-def load_split_data(data_dir: str = 'data/splits', target_column: str = 'MEDV'):
-    """
-    Carga datos ya divididos en train/test
-    
-    Args:
-        data_dir:  Directorio con train.csv y test.csv
-        target_column: Nombre de la columna target
-        
-    Returns:
-        tuple: (X_train, X_test, y_train, y_test)
-        
-    Raises:
-        FileNotFoundError: Si no existen los archivos
-    """
-    data_path = Path(data_dir)
-    train_path = data_path / 'train.csv'
-    test_path = data_path / 'test.csv'
-    
-    # Validar que existen
-    if not train_path.exists() or not test_path.exists():
-        raise FileNotFoundError(
-            f"❌ Archivos no encontrados en {data_path}\n"
-            f"   Ejecuta primero: python -m src.data.run_load_data"
-        )
-    
-    logger.info(f"📂 Cargando datos desde: {data_path}")
-    
-    # Cargar
-    train_df = pd.read_csv(train_path)
-    test_df = pd.read_csv(test_path)
-    
-    logger.info(f"✓ Train:  {train_df.shape}")
-    logger.info(f"✓ Test:   {test_df.shape}")
-    
-    # Validar target
-    if target_column not in train_df.columns:
-        raise ValueError(f"❌ Columna target '{target_column}' no encontrada")
-    
-    # Separar features y target
-    X_train = train_df.drop(columns=[target_column])
-    y_train = train_df[target_column]
-    
-    X_test = test_df.drop(columns=[target_column])
-    y_test = test_df[target_column]
-    
-    logger.info(f"✓ Features: {X_train.shape[1]}")
-    logger.info(f"✓ Target: {target_column}")
-    
-    return X_train, X_test, y_train, y_test
 
 
 def save_processed_data(

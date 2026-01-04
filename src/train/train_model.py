@@ -110,7 +110,7 @@ class ModelTrainer:
         # Tracking URI
         tracking_uri = mlflow_config.get('tracking_uri', 'artifacts/mlruns')
         
-        # FIX PARA WINDOWS: Convertir rutas a file: // URI
+        
         if not tracking_uri.startswith(('http://', 'https://', 'databricks', 'file://')):
             tracking_path = Path(tracking_uri).resolve()
             tracking_path.mkdir(parents=True, exist_ok=True)

@@ -24,11 +24,11 @@
 
 ### Feature Importance
 
-1. `credit_score` - 0.35
-2. `income` - 0.25
-3. `debt_to_income_ratio` - 0.18
-4. `employment_years` - 0.12
-5. `age` - 0.10
+1.`credit_score` - 0.35
+2.`income` - 0.25
+3.`debt_to_income_ratio` - 0.18
+4.`employment_years` - 0.12
+5.`age` - 0.10
 
 ### Tracking con MLflow
 

@@ -12,7 +12,7 @@
 ### 📦 Módulos (`src/`)
 
 - [**data**](./modules/data.md) - Carga y división de datos
-- [**preprocess**](./modules/preprocess. md) - Preprocesamiento y feature engineering
+- [**preprocess**](./modules/preprocess.md) - Preprocesamiento y feature engineering
 - [**train**](./modules/train.md) - Entrenamiento de modelos con MLflow
 - [**evaluate**](./modules/evaluate.md) - Evaluación y visualizaciones
 - [**utils**](./modules/utils.md) - Utilidades compartidas (logging)
@@ -37,27 +37,27 @@
 ## 🚀 Quick Start
 
 ```bash
-# 1. Instalar dependencias
+# 1.Instalar dependencias
 pip install -r requirements.txt
 
-# 2. Cargar y dividir datos
+# 2.Cargar y dividir datos
 python -m src.data.run_load_data
 
-# 3. Preprocesar
-python -m src. preprocess.run_preprocess
+# 3.Preprocesar
+python -m src.preprocess.run_preprocess
 
-# 4. Entrenar modelos
+# 4.Entrenar modelos
 python -m src.train.run_train
 
-# 5. Evaluar
+# 5.Evaluar
 python -m src.evaluate.run_evaluate --model artifacts/models/best_model.pkl
 
-# 6. Servir API (deployment)
-pip install -r requirements. api.txt
+# 6.Servir API (deployment)
+pip install -r requirements.api.txt
 uvicorn api.main:app --reload
 
-# 7. Docker (alternativa)
-docker build -t mlops-housing . 
+# 7.Docker (alternativa)
+docker build -t mlops-housing .
 docker run -p 8000:8000 mlops-housing
 ```
 
@@ -95,7 +95,7 @@ MLOPS_credits/
 │   └── configs/         # Configuraciones YAML
 ├── api/                  # API REST (FastAPI) 
 ├── artifacts/
-│   ├── models/          # Modelos entrenados (. pkl)
+│   ├── models/          # Modelos entrenados (.pkl)
 │   ├── preprocessors/   # Transformers (.pkl)
 │   ├── logs/            # Logs de ejecución
 │   ├── mlruns/          # MLflow tracking
@@ -105,7 +105,7 @@ MLOPS_credits/
 ├── tests/               # Tests unitarios
 ├── Dockerfile           # Containerización 
 ├── requirements.txt     # Dependencias core 
-├── requirements. api.txt # Dependencias API 
+├── requirements.api.txt # Dependencias API 
 └── README.md
 ```
 

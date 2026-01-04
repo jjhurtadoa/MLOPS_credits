@@ -20,8 +20,8 @@ git clone https://github.com/jjhurtadoa/MLOPS_credits.git
 ### Instalar dependencias
 
 Breve explicación:
-- `requirements.txt`: dependencias necesarias para el preprocesamiento y entrenamiento local (p. ej. pandas, scikit-learn, xgboost, lightgbm, catboost). Instalarlo si vas a ejecutar pipelines de datos o entrenar modelos.
-- `requirements-api.txt`: dependencias mínimas para servir la API (p. ej. FastAPI, uvicorn, pydantic, joblib). Instalarlo si solo quieres ejecutar la API o construir la imagen runtime.
+- `requirements.txt`: dependencias necesarias para el preprocesamiento y entrenamiento local (p.ej.pandas, scikit-learn, xgboost, lightgbm, catboost).Instalarlo si vas a ejecutar pipelines de datos o entrenar modelos.
+- `requirements-api.txt`: dependencias mínimas para servir la API (p.ej.FastAPI, uvicorn, pydantic, joblib).Instalarlo si solo quieres ejecutar la API o construir la imagen runtime.
 
 Comandos:
 

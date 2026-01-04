@@ -9,9 +9,7 @@ Ejecutar:
 import pytest
 import pandas as pd
 import numpy as np
-from pathlib import Path
-import tempfile
-import yaml
+
 
 from src.preprocess.preprocessing import (
     MissingValueHandler,
@@ -405,7 +403,7 @@ def test_real_estate_domain_features_creates_features(boston_like_data):
 
 def test_real_estate_domain_features_no_rad():
     """Test: No crea accessibility_score si falta RAD"""
-    # Datos SIN RAD (como tu caso real)
+    # Datos SIN RAD 
     df = pd.DataFrame({
         'RM': [6.5, 5.2, 7.1],
         'AGE': [65.2, 78.9, 45.8],
@@ -444,6 +442,62 @@ def test_real_estate_domain_features_calculations():
     assert result['tax_per_room'].iloc[0] == pytest.approx(300.0 / 6.0, rel=0.01)  # TAX / RM
     assert result['property_quality'].iloc[0] == pytest.approx(6.0 * 0.9, rel=0.01)  # RM * (1 - 10/100)
 
+# ============================================================================
+# TESTS: PolynomialFeatureCreator
+# ============================================================================
+
+def test_polynomial_features_degree2():
+    """Test: Crea potencias e interacciones (grado 2)"""
+    df = pd.DataFrame({'A': [1.0, 2.0, 3.0], 'B': [2.0, 3.0, 4.0]})
+
+    poly = PolynomialFeatureCreator(degree=2, interaction_only=False, include_bias=False)
+    result = poly.fit_transform(df)
+
+    # Debe agregar columnas nuevas (cuadrados e interaccion)
+    assert result.shape[1] > df.shape[1]
+
+    # Buscar columna que corresponda a A*B y columna a A^2 mediante comparación numérica
+    found_mul = False
+    found_a2 = False
+    for col in result.columns:
+        if np.allclose(result[col].values, (df['A'] * df['B']).values):
+            found_mul = True
+        if np.allclose(result[col].values, (df['A'] ** 2).values):
+            found_a2 = True
+
+    assert found_mul, "Debe existir una columna igual a A * B"
+    assert found_a2, "Debe existir una columna igual a A^2"
+
+
+def test_polynomial_features_subset_preserves_others():
+    """Test: Transformar un subset de features y mantener las otras columnas"""
+    df = pd.DataFrame({'A': [1.0, 2.0], 'B': [3.0, 4.0], 'C': [5.0, 6.0]})
+
+    poly = PolynomialFeatureCreator(degree=2, interaction_only=False, include_bias=False, features_to_transform=['A', 'B'])
+    result = poly.fit_transform(df)
+
+    # C debe permanecer presente
+    assert 'C' in result.columns
+    # Debe existir al menos una nueva columna distinta de A,B,C
+    assert result.shape[1] > df.shape[1]
+
+    # Verificar que existe columna igual a A^2
+    found_a2 = any(np.allclose(result[col].values, (df['A'] ** 2).values) for col in result.columns)
+    assert found_a2
+
+
+def test_polynomial_features_no_valid_columns_returns_same():
+    """Test: Si no hay columnas válidas para transformar, retorna el DataFrame sin cambios"""
+    df = pd.DataFrame({'A': [1.0, 2.0], 'B': [3.0, 4.0]})
+
+    poly = PolynomialFeatureCreator(degree=2, features_to_transform=['Z'])
+    # fit() won't create poly_ because no valid cols
+    poly.fit(df)
+    result = poly.transform(df)
+
+    # Debe retornar DataFrame con iguales valores y shape
+    assert result.shape == df.shape
+    pd.testing.assert_frame_equal(result, df)
 
 # ============================================================================
 # TESTS: FeatureEngineer (Pipeline Completo)
@@ -528,7 +582,6 @@ def test_feature_engineer_save_load(boston_like_data, tmp_path):
 @pytest.mark.integration
 def test_with_real_preprocessing_config(boston_like_data):
     """Test: Pipeline completo con config real"""
-    # Tu config real
     config = {
         'feature_processing': {
             'handling_na': {
@@ -568,3 +621,5 @@ def test_with_real_preprocessing_config(boston_like_data):
     assert X_final.isnull().sum().sum() == 0, "No deben quedar NAs"
     assert X_final.shape[0] == boston_like_data.shape[0], "Mismas filas"
     assert X_final.shape[1] > boston_like_data.shape[1], "Debe tener más columnas"
+
+

@@ -4,12 +4,12 @@
 
 ## ⚠️ Evitar Data Leakage — por qué el split está en `src/data`
 
-El módulo `data` realiza la partición train/test antes de cualquier transformación para prevenir data leakage. Hacer el split en una etapa separada garantiza que todas las transformaciones que «aprenden» del dato (imputadores, scalers, codificadores, selección de features) se ajusten únicamente sobre el conjunto de entrenamiento y luego se apliquen al test/producción. Buenas prácticas: partir los datos primero, ajustar preprocesadores solo con `train` (fit) y usar `random_state` fijo. Registrar la semilla y la versión/commit en la metadata para trazabilidad.
+El módulo `data` realiza la partición train/test antes de cualquier transformación para prevenir data leakage.Hacer el split en una etapa separada garantiza que todas las transformaciones que «aprenden» del dato (imputadores, scalers, codificadores, selección de features) se ajusten únicamente sobre el conjunto de entrenamiento y luego se apliquen al test/producción.Buenas prácticas: partir los datos primero, ajustar preprocesadores solo con `train` (fit) y usar `random_state` fijo.Registrar la semilla y la versión/commit en la metadata para trazabilidad.
 
 ## 📂 Estructura
 ```
 src/data/
-├── __init__.py          # paquete
+├── __init__.py           # paquete
 ├── load_data.py          # Funciones principales
 └── run_load_data.py      # Script ejecutable
 ```
@@ -85,22 +85,12 @@ CSV Raw → Validación → Split (80/20) → Guardar
 
 ---
 
-## 📝 Logging
-
-```
-📂 Cargando datos desde:  data/raw/HousingData.csv
-✓ Datos cargados:  506 filas, 14 columnas
-✓ Train set: 404 filas (80.0%)
-✓ Test set: 102 filas (20.0%)
-```
-
----
 
 ## ⚠️ Consideraciones
 
 - **Reproducibilidad**: Usa `random_state=42`
 - **No modifica**:  Solo carga y divide, no limpia
-- **Siguiente paso**: `src. preprocess`
+- **Siguiente paso**: `src.preprocess`
 
 ---
 
