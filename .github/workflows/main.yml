@@ -46,7 +46,7 @@ jobs:
         run: docker compose up -d
       
       - name: Wait for API
-        run: sleep 15
+        run: sleep 60
       
       - name: Health check
         run: curl -f http://localhost:8000/health
