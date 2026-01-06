@@ -1,82 +1,42 @@
-# Prometheus - Monitoreo de Métricas
+# Prometheus — Monitorización de métricas
 
-## 🎯 Propósito
-
-Prometheus recolecta métricas de la API cada 15 segundos y las almacena en una time-series database.
+Prometheus es la herramienta para *revisar* y consultar métricas de tiempo (time-series) expuestas por la API y los procesos de inferencia. Se usa principalmente para inspección, visualización en Grafana y para disparar alertas cuando las métricas cruzan umbrales.
 
 ---
 
-## 🚀 Acceso
-
-- **URL:** http://localhost:9090
-- **Puerto:** 9090
-
----
-
-## ✅ Verificar Targets
-
-![Targets](../../images/prometheus-01-targets.png)
-
-1. Click en **Status** → **Targets**
-2. Verificar que `api: 8000/metrics` esté **UP** (verde)
+## Acceso rápido
+- UI: http://localhost:9090
+- Verifica targets en: Status → Targets (debe aparecer tu servicio `/metrics`).
 
 ---
 
-## 📊 Queries Útiles
-
-### Total de requests
-
-```promql
-http_requests_total
-```
-
-![Query Result](../../images/prometheus-02-graph.png)
-
-### Requests por segundo
-
-```promql
-rate(http_requests_total[5m])
-```
-
-### Latencia promedio
-
-```promql
-rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])
-```
-
-### Percentil 95 de latencia
-
-```promql
-histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
-```
-
-### Tasa de errores (5xx)
-
-```promql
-sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m])) * 100
-```
+## ¿Para qué lo usamos aquí?
+- Ver latencia y disponibilidad de los endpoints (p50/p95/p99).
+- Monitorizar tiempos de inferencia y throughput del modelo.
+- Detectar errores de predicción y anomalías en distribuciones (drift).
+- Servir métricas que Grafana consume para dashboards y alertas.
 
 ---
 
-## 🔧 Configuración
-
-**Archivo:** `prometheus/prometheus.yml`
-
-```yaml
-scrape_configs:
-  - job_name: 'fastapi'
-    scrape_interval: 15s
-    static_configs:
-      - targets: ['api:8000']
-```
+## Archivos relevantes
+- La configuración de scrape está en `monitoring/prometheus.yml`.
 
 ---
 
-## 📖 Referencias
+## Imágenes de referencia
+Targets (verificación):
 
-- [PromQL Cheat Sheet](https://promlabs.com/promql-cheat-sheet/)
-- [Prometheus Docs](https://prometheus.io/docs/)
+![Prometheus Targets](../../images/prometheus-01-target.png)
+
+Ejemplo de query/visualización:
+
+![Prometheus Graph](../../images/prometheus-02-graph.png)
 
 ---
 
-[← Volver al índice](../index.md) | [Siguiente:  Grafana →](grafana.md)
+> Nota: Levantamos Prometheus usando la imagen oficial de Docker.
+>
+>
+> Prometheus recoge las métricas; no instrumenta el servicio. Para exportar métricas desde FastAPI o procesos de inferencia usa un cliente Prometheus (librería `prometheus_client`) y expón `/metrics`.
+
+[← Volver](../index.md) | [Grafana →](grafana.md)

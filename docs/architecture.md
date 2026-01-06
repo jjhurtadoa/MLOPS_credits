@@ -1,51 +1,15 @@
 # Arquitectura del Sistema
 
-## 🏗️ Diagrama de Componentes
+![Arquitecture Diagram](../images/arquitecture-diagram.PNG)
 
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│   Datos     │────▶│ Preprocessing│────▶│  Training   │
-│   Raw       │     │   Pipeline   │     │   Pipeline  │
-└─────────────┘     └──────────────┘     └─────────────┘
-                                                 │
-                                                 ▼
-                                          ┌─────────────┐
-                                          │   MLflow    │
-                                          │  Tracking   │
-                                          └─────────────┘
-                                                 │
-                                                 ▼
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│   Cliente   │────▶│  FastAPI     │────▶│   Model     │
-│             │     │  REST API    │     │  Registry   │
-└─────────────┘     └──────────────┘     └─────────────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │  Monitoring  │
-                    │  Dashboard   │
-                    └──────────────┘
-```
+El sistema procesa datos crudos, aplica un pipeline de preprocessing y feature engineering, entrena y compara modelos con seguimiento en MLflow, publica el mejor modelo y artefactos, y sirve predicciones mediante una API REST. El stack está dockerizado y monitorizado.
 
-## 🔄 Flujo de MLOps
+Flujo principal:
+- Data Ingestion: CSV/BD → validación y versionado.
+- Preprocessing: limpieza, scaling y creación de features (pipelined transformers, joblib).
+- Training & Evaluation: entrenamiento de varios modelos (scikit-learn, XGBoost, LightGBM, CatBoost), comparación y registro (MLflow + metadata YAML).
+- Model Registry / Artefacts: modelos y preprocessors guardados en `artifacts/models` y `preprocessors`.
+- Serving: FastAPI + Uvicorn/Gunicorn en contenedores Docker (endpoints `/predict`, `/health`, `/metrics`).
+- Monitoring: métricas expuestas (`/metrics`) y recopiladas por Prometheus; visualización y alertas en Grafana.
 
-### 1.**Data Ingestion**
-- Source:  CSV/Database
-- Validación de esquema
-- Versionado de datos
-
-### 2.**Training Pipeline**
-- Feature engineering
-- Model training
-- Experiment tracking (MLflow)
-- Model validation
-
-### 3.**Model Serving**
-- REST API (FastAPI)
-- Docker containerization
-- Load balancing
-
-### 4.**Monitoring**
-- Drift detection
-- Performance metrics
-- Alerting system
+Tecnologías clave (resumen): Python, pandas, scikit-learn, xgboost, lightgbm, catboost, joblib, PyYAML, MLflow, FastAPI, Uvicorn/Gunicorn, Docker/Docker Compose, Prometheus, Grafana.

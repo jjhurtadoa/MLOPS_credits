@@ -171,16 +171,19 @@ feature_engineering:
 ### **Modificación**
 
 #### Opción 1: Editar manualmente
+
 ```bash
 nano src/configs/preprocessing_config.yaml
 ```
 
 #### Opción 2: Regenerar desde EDA
+
 ```python
 # En notebooks/eda.ipynb, modificar eda_config y ejecutar celda de guardado
 ```
 
 #### Opción 3: Crear versiones alternativas
+
 ```bash
 # Crear variante
 cp src/configs/preprocessing_config.yaml src/configs/preprocessing_v2.yaml
@@ -200,6 +203,7 @@ Este archivo se crea **manualmente** con las especificaciones de modelos y hiper
 ### **Cómo Mejorarlo**
 
 #### **Situación Actual** (Manual):
+
 ```yaml
 # Creado manualmente
 models:
@@ -211,116 +215,13 @@ models:
       learning_rate: 0.1
 ```
 
-#### **Mejora 1: Template con valores por defecto**
 
-Crear `src/configs/model_config_template.yaml`:
-```yaml
-# ============================================================================
-# MODEL CONFIGURATION TEMPLATE
-# ============================================================================
 
-training:
-  mlflow: 
-    tracking_uri: 'artifacts/mlruns'
-    experiment_name:  'house_price_prediction'
-  
-  validation: 
-    cv_folds: 5
-    random_state: 42
+#### **Mejora 1: Soporte para tuning automático en el repo**
 
-# ----------------------------------------------------------------------------
-# MODELS
-# ----------------------------------------------------------------------------
+Incluir un optimizador de hiperparámetros real en `src/train/optimize_model.py` (uso de Optuna). Ese módulo realiza búsquedas, registra ejecuciones en MLflow y devuelve los mejores parámetros. Para incorporar los resultados a la configuración puedes copiar manualmente `best_params` a `src/configs/model_config.yaml` o usar un script que exporte los parámetros al archivo YAML.
 
-models:
-  # Random Forest
-  random_forest:
-    module: 'sklearn.ensemble'
-    class: 'RandomForestRegressor'
-    params:
-      n_estimators: 100
-      max_depth: 10
-      random_state: 42
-      n_jobs: -1
-  
-  # XGBoost
-  xgboost:
-    module: 'xgboost'
-    class: 'XGBRegressor'
-    params:
-      max_depth: 6
-      learning_rate: 0.1
-      n_estimators: 100
-      random_state: 42
-  
-  # LightGBM
-  lightgbm:
-    module: 'lightgbm'
-    class: 'LGBMRegressor'
-    params: 
-      num_leaves: 31
-      learning_rate: 0.05
-      n_estimators: 100
-      random_state: 42
-
-# ----------------------------------------------------------------------------
-# MODEL SELECTION
-# ----------------------------------------------------------------------------
-
-selection: 
-  metric: 'val_rmse'      # Métrica para seleccionar mejor modelo
-  mode: 'min'             # min o max
-```
-
-#### **Mejora 2: Generación programática desde notebook**
-
-**En `notebooks/03_hyperparameter_tuning.ipynb`** (nuevo):
-```python
-import yaml
-from sklearn.model_selection import GridSearchCV
-
-# 1.Hacer tuning
-param_grid = {
-    'max_depth': [4, 6, 8],
-    'learning_rate': [0.01, 0.05, 0.1],
-    'n_estimators': [100, 200, 300]
-}
-
-grid_search = GridSearchCV(XGBRegressor(), param_grid, cv=5)
-grid_search.fit(X_train, y_train)
-
-# 2.Obtener mejores parámetros
-best_params = grid_search.best_params_
-
-# 3.Generar config
-model_config = {
-    'training': {
-        'mlflow':  {
-            'tracking_uri':  'artifacts/mlruns',
-            'experiment_name': 'house_price_prediction'
-        },
-        'validation': {
-            'cv_folds':  5,
-            'random_state': 42
-        }
-    },
-    'models': {
-        'xgboost': {
-            'module': 'xgboost',
-            'class': 'XGBRegressor',
-            'params': best_params  # ← Parámetros óptimos del tuning
-        }
-    }
-}
-
-# 4.Guardar
-with open('../src/configs/model_config.yaml', 'w') as f:
-    yaml.dump(model_config, f, default_flow_style=False, indent=2)
-
-print('✓ Guardado: model_config.yaml con parámetros óptimos')
-```
-
-#### **Mejora 3: Múltiples configs para experimentación**
+#### **Mejora 2: Múltiples configs para experimentación**
 
 ```
 src/configs/
@@ -331,6 +232,7 @@ src/configs/
 ```
 
 **Uso**:
+
 ```bash
 # Entrenar con baseline
 python -m src.train.run_train --config src/configs/model_config_baseline.yaml
@@ -341,51 +243,10 @@ python -m src.train.run_train --config src/configs/model_config_tuned.yaml
 
 ---
 
-## 📊 Flujo de Generación de Configs
 
-```mermaid
-graph TD
-    A[notebooks/eda.ipynb] -->|Análisis| B{Hallazgos}
-    B -->|Automático| C[preprocessing_config.yaml]
-    
-    D[notebooks/hyperparameter_tuning.ipynb] -->|Grid Search| E{Mejores params}
-    E -->|Programático| F[model_config.yaml]
-    
-    G[Template manual] -->|Copy & Edit| F
-    
-    C --> H[src/preprocess/]
-    F --> I[src/train/]
-```
 
----
+### 3.**Experimentación**
 
-## ✅ Buenas Prácticas
-
-### 1.**Versionado**
-```bash
-# Commitear configs junto al código
-git add src/configs/*.yaml
-git commit -m "feat: nueva config con log transform en CRIM"
-```
-
-### 2.**Documentación inline**
-```yaml
-# Agregar comentarios explicativos
-outliers:
-  log_transform: 
-    - CRIM  # Distribución muy sesgada (EDA mostró outliers extremos)
-    - B     # Variable con valores atípicos
-```
-
-### 3.**Validación**
-El código valida que las configuraciones sean válidas:
-```python
-# Los módulos validan que features en config existan
-if 'CRIM' not in X_train.columns:
-    raise ValueError("Feature CRIM en config no existe en datos")
-```
-
-### 4.**Experimentación**
 ```bash
 # Crear variantes para experimentos
 cp preprocessing_config.yaml preprocessing_no_log.yaml
@@ -399,6 +260,7 @@ cp preprocessing_config.yaml preprocessing_no_log.yaml
 ## 🔧 Ejemplo Completo:  Workflow
 
 ### 1.EDA → Generar `preprocessing_config.yaml`
+
 ```python
 # En notebooks/eda.ipynb
 # ...análisis ...
@@ -408,6 +270,7 @@ with open('../src/configs/preprocessing_config.yaml', 'w') as f:
 ```
 
 ### 2.Hyperparameter Tuning → Generar `model_config.yaml`
+
 ```python
 # En notebooks/hyperparameter_tuning.ipynb (crear)
 # ...grid search ...
@@ -417,46 +280,39 @@ with open('../src/configs/model_config.yaml', 'w') as f:
 ```
 
 ### 3.Ejecutar pipelines con configs
+
 ```bash
 python -m src.preprocess.run_preprocess   # Usa preprocessing_config.yaml
 python -m src.train.run_train             # Usa model_config.yaml
 ```
 
----
+## Estructura compacta de `src/configs/`
 
-## 📝 Template para Nuevos Configs
+- `preprocessing_config.yaml`  -> reglas de imputación, outliers, scaling y feature_engineering (generado desde `notebooks/eda.ipynb`).
+- `model_config.yaml`         -> definición de modelos, parámetros y settings de entrenamiento (mlflow, validación).
+- Posibles variantes: `model_config_baseline.yaml`, `model_config_tuned.yaml`, `preprocessing_v2.yaml`.
 
-```yaml
-# ============================================================================
-# [NOMBRE DEL CONFIG]
-# Generado desde:  [notebooks/xxx.ipynb o manual]
-# Fecha:  [YYYY-MM-DD]
-# Descripción: [Propósito de esta configuración]
-# ============================================================================
+Nota: el `preprocessing_config.yaml` que se usa actualmente se deriva del notebook de EDA; puedes editarlo manualmente o regenerarlo desde el notebook para mantener consistencia con los hallazgos.
 
-# Sección 1
-seccion1:
-  parametro1: valor1  # Comentario explicativo
-  parametro2: valor2
+### Formato (resumen rápido)
 
-# Sección 2
-seccion2:
-  # ...
-```
+- preprocessing_config.yaml (keys principales):
+  - missing_values: {mean, median, most_frequent, no_action}
+  - outliers: {log_transform, iqr_capping, winsorization}
+  - correlation: {threshold, method}
+  - scaling: {method}
+  - feature_engineering: {interactions: [{type, features, name}]}
 
----
-
-## ⚠️ Consideraciones
-
-- **No hardcodear**:  Evita valores mágicos en código, usa configs
-- **DRY**: No repetir configuraciones, usa referencias YAML si es necesario
-- **Testing**: Prueba configs en notebooks antes de automatizar
-- **Backup**: Git guarda historial de cambios en configs
-
----
+- model_config.yaml (keys principales):
+  - training: {mlflow:{tracking_uri, experiment_name}, validation:{cv_folds, random_state}}
+  - models: {<model_name>: {module, class, params}}
+  - selection: {metric, mode}
 
 ## 🔗 Ver también
 
 - [Preprocess Module](./modules/preprocess.md) - Uso de `preprocessing_config.yaml`
 - [Train Module](./modules/train.md) - Uso de `model_config.yaml`
 - [Notebooks](./notebooks.md) - Generación de configs desde EDA
+
+---
+

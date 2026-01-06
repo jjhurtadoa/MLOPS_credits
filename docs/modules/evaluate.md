@@ -1,148 +1,120 @@
 # Módulo `evaluate`
 
-> Análisis profundo de modelos complementario a MLflow
+> Evaluación y generación de reportes visuales a partir de un modelo entrenado
 
 ## 📂 Estructura
 ```
 src/evaluate/
-├── evaluate_model.py       # Clase ModelEvaluator
-├── visualizations. py       # Funciones de gráficos
-└── run_evaluate.py         # Script ejecutable
-
+├── evaluate_model.py       # Clase ModelEvaluator (métricas, visualizaciones, reports)
+├── visualizations.py       # Funciones de gráficos (residuals, predictions, importance...)
+└── run_evaluate.py         # Script ejecutable para generar reportes desde CLI
 ```
 
 ---
 
 ## 🎯 Propósito
 
-Validación detallada del modelo **después** de seleccionarlo en MLflow: 
+Proporcionar una evaluación reproducible y de alta calidad para un modelo ya seleccionado (por ejemplo desde MLflow). No reemplaza al tracking de MLflow, sino que complementa con:
 
-- ✅ Análisis de errores por segmentos de negocio
-- ✅ Visualizaciones de alta calidad para presentaciones
-- ✅ Reportes para stakeholders no-técnicos
-- ✅ Validación pre-deploy
-
----
-
-## 🔀 MLflow vs Evaluate
-
-| Aspecto | MLflow | evaluate/ |
-|---------|--------|-----------|
-| **Fase** | Experimentación | Validación final |
-| **Pregunta** | "¿Qué modelo ganó?" | "¿Por qué ganó?  ¿Dónde falla?" |
-| **Usuarios** | Data Scientists | DS + Stakeholders |
-| **Métricas** | Globales | Por segmentos |
-| **Visualizaciones** | Básicas (UI) | Profesionales (PNG/HTML) |
-| **Reportes** | No | Sí |
-
-**Flujo típico:**
-```
-1. MLflow → XGBoost gana (RMSE:  3.2)
-2. evaluate/ → Falla en casas >$500k (MAPE: 18.7%)
-3. Decisión → Iterar antes de deploy
-```
-
-> 📖 Ver [MLflow](../tools/mlflow.md) para tracking de experimentos
+- métricas detalladas (RMSE, MAE, R², MAPE, max/median error),
+- visualizaciones publicables (PNG) y
+- reportes JSON listos para archivar en `artifacts/evaluation/`.
 
 ---
 
-## 🚀 Uso
+## 🔀 Relación con MLflow
 
-```python
-from src.evaluate import ModelEvaluator
+- MLflow: tracking y comparación rápida entre runs.
+- `evaluate/`: análisis final y diagnóstico por segmentos, preparado para decisiones de deploy.
 
-# Cargar modelo ganador de MLflow
-evaluator = ModelEvaluator('artifacts/models/best_model.pkl')
+---
 
-# Evaluar
-metrics = evaluator.evaluate(X_test, y_test)
+## 🚀 Uso (CLI)
 
-# Generar reportes
-evaluator.generate_report('artifacts/evaluation/')
+```bash
+# Evaluar un modelo y generar reporte (usa data/interim/test_processed.csv)
+python -m src.evaluate.run_evaluate --model artifacts/models/best_model.pkl
+
+# Incluir evaluación sobre train (opcional)
+python -m src.evaluate.run_evaluate --model artifacts/models/best_model.pkl --include-train
+
+# Personalizar data dir o output dir
+python -m src.evaluate.run_evaluate --model artifacts/models/xgboost_model.pkl --data-dir data/interim --output-dir artifacts/evaluation/xgboost
 ```
 
 ---
 
-## 📊 Análisis Disponibles
+## 🧭 Clase principal: ModelEvaluator (`src/evaluate/evaluate_model.py`)
 
-### **1. Métricas detalladas**
-```python
-metrics = evaluator.calculate_metrics(y_test, y_pred)
-# RMSE, MAE, R², MAPE, max_error, median_error
-```
+Resumen de la API pública:
 
-### **2. Visualizaciones**
-```python
-from src.evaluate.visualizations import (
-    plot_residuals,           # Residual plot
-    plot_predictions,         # Predicted vs Actual
-    plot_feature_importance,  # Feature importance
-    plot_error_distribution   # Error distribution
-)
-```
+- __init__(model_path: str, model_name: Optional[str] = None)
+  - Carga el modelo desde disco (`joblib.load`).
+  - Inicializa `metrics_` y `predictions_`.
 
----
+- calculate_metrics(y_true, y_pred, prefix='') -> dict
+  - Calcula: rmse, mae, r2, mape (%), max_error, median_error.
+  - Devuelve un diccionario con claves opcionalmente prefijadas (ej. `test_rmse`).
 
-## 📁 Salida
+- evaluate(X_test, y_test, X_train=None, y_train=None) -> dict
+  - Ejecuta predicción en test y opcionalmente en train.
+  - Guarda predicciones en `self.predictions_` y métricas en `self.metrics_`.
+  - Detecta overfitting simple: si `train_rmse - test_rmse < -1.0` emite un WARNING.
 
-```
-artifacts/evaluation/
-├── metrics_XGBoost. json            # Métricas JSON
-├── residuals_XGBoost.png           # Residual plot
-├── predictions_XGBoost.png         # Scatter plot
-├── error_distribution_XGBoost. png  # Histograma de errores
-└── feature_importance_XGBoost.png  # Bar plot
-```
+- generate_visualizations(output_dir, X_test=None)
+  - Genera y guarda PNGs para residuals, predicted vs actual, distribución de errores y feature importance (si el modelo expone `feature_importances_`).
+
+- generate_report(output_dir, X_test=None)
+  - Guarda `self.metrics_` como JSON y llama a `generate_visualizations`.
 
 ---
 
-## 💡 Ejemplo de Valor Agregado
+## 📊 Funciones de visualización (`src/evaluate/visualizations.py`)
 
-### **Situación:**
-```
-MLflow:   XGBoost RMSE=3.2 ✅
-¿Deploy? 🤔
-```
+- plot_residuals(y_true, y_pred, title, save_path)
+  - Residuals vs predicted + histograma de residuales.
 
-### **Análisis con evaluate/:**
-```python
-evaluator.analyze_by_price_range([200000, 500000])
+- plot_predictions(y_true, y_pred, title, save_path)
+  - Scatter predicted vs actual con línea perfecta y R² anotado.
 
-# Output:
-# - Casas <$200k:    MAPE = 8.5%  ✅
-# - Casas $200-500k: MAPE = 10.2% ✅
-# - Casas >$500k:  MAPE = 18.7% ⚠️ PROBLEMA
+- plot_feature_importance(model, feature_names, title, top_n, save_path)
+  - Barra horizontal para `feature_importances_` (si está presente).
 
-worst = evaluator.get_worst_predictions(n=5)
-# Casa #42: Pred=$800k, Real=$400k (Error: 100%)
-```
+- plot_error_distribution(y_true, y_pred, title, save_path)
+  - Histogramas de errores absolutos y porcentuales.
 
-### **Decisión:**
-```
-NO deploy. 
-Razón: Modelo falla en casas caras. 
-Acción: Más datos de casas >$500k. 
-```
-
-**Sin evaluate/:** Habrías desplegado modelo con fallas graves 🚨
+- plot_model_comparison(comparison_df, metric, save_path)
+  - Visual comparativa entre modelos (colorea el "mejor").
 
 ---
 
-## ⚠️ Cuándo Usar
+## 📁 Salida esperada
 
-### **Usa evaluate/ cuando:**
-- ✅ Tienes candidato para deploy
-- ✅ Necesitas análisis por segmentos
-- ✅ Presentarás resultados a stakeholders
+Al ejecutar `run_evaluate.py` con `--output-dir artifacts/evaluation` se generan, por modelo:
 
-### **Usa MLflow cuando:**
-- ✅ Experimentas con múltiples modelos
-- ✅ Comparas hiperparámetros
-- ✅ Iteración rápida
+- `{model_name}_metrics.json`  — JSON con todas las métricas calculadas
+- `{model_name}_residuals_test.png` — residual plot
+- `{model_name}_predictions_test.png` — predictions vs actual
+- `{model_name}_errors_test.png` — distribución de errores
+- `{model_name}_feature_importance.png` — (si aplica)
+
+Los nombres exactos se construyen desde `ModelEvaluator.model_name`.
+
+---
+
+## ⚠️ Notas importantes (consistentes con el código)
+
+- El evaluador carga el modelo con `joblib.load` — el archivo debe ser accesible y compatible.
+- `feature_importances_` es requerida por `plot_feature_importance`; si no existe la función retorna `None` y no escribe archivo.
+- La detección de overfitting es intencionalmente simple (umbral de 1.0 en RMSE diferencial). Ajústalo en `evaluate_model.py` si necesitas otro criterio.
+- El módulo no modifica modelos ni registros de MLflow — solo lee modelos y datos.
 
 ---
 
 ## 🔗 Ver también
 
-- [MLflow](../tools/mlflow.md) - Tracking de experimentos
-- [Train](./train.md) - Entrenamiento de modelos
+- [Train](./train.md) — cómo generar `artifacts/models/*`
+- [Preprocess](./preprocess.md) — cómo generar `data/interim/*_processed.csv` usados por el evaluador
+- [MLflow (tools)](../tools/mlflow.md) — localizar el modelo ganador en el tracking server
+
+---

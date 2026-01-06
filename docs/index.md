@@ -7,7 +7,6 @@
 ### 🏗️ Arquitectura
 
 - [**Arquitectura del Sistema**](./architecture.md) - Diseño general del proyecto MLOps
-- [**Pipelines End-to-End**](./pipelines.md) - Flujos de trabajo completos
 
 ### 📦 Módulos (`src/`)
 
@@ -15,53 +14,32 @@
 - [**preprocess**](./modules/preprocess.md) - Preprocesamiento y feature engineering
 - [**train**](./modules/train.md) - Entrenamiento de modelos con MLflow
 - [**evaluate**](./modules/evaluate.md) - Evaluación y visualizaciones
-- [**utils**](./modules/utils.md) - Utilidades compartidas (logging)
 
-### 📊 Datos y Configuración
+### 🚀 Tools
 
-- [**Dataset**](./dataset.md) - Boston Housing Dataset
-- [**Configuration**](./configuration.md) - Archivos YAML de configuración
+- [**MLflow**](.tools/mlflow.md) - Tracking de experimentos: cómo configurar el tracking server, registrar runs y buscar modelos.
+- [**Docker**](.tools/docker.md) - Containerización y deployment.
+- [**Github_Actions**](.tools/github_actions.md) - Integración continua: pipelines para tests,  build de imagen y publicación de artefactos.
 
-### 🚀 Deployment
+### 🚀 Monitoring
 
-- [**MLflow**](./mlflow.md) - Tracking de experimentos
-- [**API REST**](./api.md) - Servicio de predicción con FastAPI
-- [**Docker**](./docker.md) - Containerización y deployment
+- [**Prometheus**](.monitoring/prometheus.md) - Recolección de métricas: exporters y métricas expuestas por la API y el servicio de entrenamiento.
+- [**Grafana**](.monitoring/grafana.md) - Dashboards y alertas: ejemplos de paneles para latencia, tasa de error y métricas de modelos.
 
-### 📚 Dependencias
 
-- [**Requirements**](./requirements.md) - Gestión de dependencias
+### 🚀 Complementos
 
----
+- [**API REST**](./api.md) - Servicio de predicción con FastAPI (endpoints, ejemplo de request/response y despliegue).
+- [**Dataset**](./dataset.md) - Boston Housing Dataset, descripción breve.
+- [**Configuration**](./configuration.md) - Archivos YAML de configuración y cómo personalizar experimentos.
+- [**Tests**](./tests.md) - Estructura de tests, comandos pytest y criterios para tests de integración/funcionales.
+- [**Model**](./model.md) - Convenciones de modelos y metadata: qué contiene `artifacts/models` y cómo versionar modelos.
+- [**EDA**](./eda.md) - Notebook EDA y hallazgos clave del análisis exploratorio (insights útiles para features).
 
-## 🚀 Quick Start
-
-```bash
-# 1.Instalar dependencias
-pip install -r requirements.txt
-
-# 2.Cargar y dividir datos
-python -m src.data.run_load_data
-
-# 3.Preprocesar
-python -m src.preprocess.run_preprocess
-
-# 4.Entrenar modelos
-python -m src.train.run_train
-
-# 5.Evaluar
-python -m src.evaluate.run_evaluate --model artifacts/models/best_model.pkl
-
-# 6.Servir API (deployment)
-pip install -r requirements.api.txt
-uvicorn api.main:app --reload
-
-# 7.Docker (alternativa)
-docker build -t mlops-housing .
-docker run -p 8000:8000 mlops-housing
-```
 
 ---
+
+
 
 ## 🛠️ Stack Tecnológico
 
@@ -100,7 +78,7 @@ MLOPS_credits/
 │   ├── logs/            # Logs de ejecución
 │   ├── mlruns/          # MLflow tracking
 │   └── evaluation/      # Reportes y gráficos
-├── notebooks/           # Análisis exploratorio (79.4%)
+├── notebooks/           # Análisis exploratorio 
 ├── docs/                # Esta documentación
 ├── tests/               # Tests unitarios
 ├── Dockerfile           # Containerización 

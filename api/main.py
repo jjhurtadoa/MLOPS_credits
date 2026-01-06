@@ -173,14 +173,14 @@ async def predict(request: Request, features: HousingFeatures):  # ← request: 
         
         logger.info(f"Features procesadas: {X_processed.columns.tolist()}")
         
-        # 3.Predecir (IGUAL QUE TU CÓDIGO ORIGINAL)
+        # 3.Predecir 
         model = model_loader.load_model(settings.model_path)
         prediction = model.predict(X_processed)[0]
         
         logger.info(f"Prediccion exitosa: {prediction:.2f}")
         
         return PredictionResponse(
-            predicted_price=float(prediction),  # ← predicted_price (como tu schema)
+            predicted_price=float(prediction),  
             model_name=model_loader.get_model_name(),
             model_version=settings.app_version
         )
@@ -216,7 +216,7 @@ async def predict_batch(request: Request, batch_request: BatchPredictionRequest)
         # 2.Aplicar preprocessing
         X_processed = preprocessor_loader.preprocess(X_raw)
         
-        # 3.Predecir (IGUAL QUE TU CÓDIGO ORIGINAL)
+        # 3.Predecir 
         model = model_loader.load_model(settings.model_path)
         predictions = model.predict(X_processed)
         

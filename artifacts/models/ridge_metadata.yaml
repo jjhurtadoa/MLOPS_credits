@@ -28,7 +28,7 @@ cv_results:
   - *id001
   - !!binary |
     BaOJNz2l2j8=
-mlflow_run_id: 7a97a09bd33e4bec85dc6b33f82a4ac2
+mlflow_run_id: 5ff73cd4d34d4dfb935bc724e2213419
 model_class: Ridge
 model_module: sklearn.linear_model
 model_name: ridge
@@ -69,4 +69,4 @@ train_metrics:
   - *id001
   - !!binary |
     ieIopro7EkA=
-trained_at: '2026-01-05T19:12:55.489014'
+trained_at: '2026-01-05T23:34:50.537011'

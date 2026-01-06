@@ -28,7 +28,7 @@ cv_results:
   - *id001
   - !!binary |
     JfJcOCy+5j8=
-mlflow_run_id: 158acdfcbbad455cade8ebd82b3eafc6
+mlflow_run_id: f2d1cbc746a34e4ca07710af2e596207
 model_class: XGBRegressor
 model_module: xgboost
 model_name: xgboost
@@ -70,4 +70,4 @@ train_metrics:
   - *id001
   - !!binary |
     Srz+8Nowkz8=
-trained_at: '2026-01-05T19:12:45.765504'
+trained_at: '2026-01-05T23:34:38.732046'

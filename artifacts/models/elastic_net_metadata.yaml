@@ -28,7 +28,7 @@ cv_results:
   - *id001
   - !!binary |
     HLcXuQC+3j8=
-mlflow_run_id: a832fbb5cc0f4f83ba0c229b829cd7f3
+mlflow_run_id: e457bb157fc648f9a972e4b097dd0e25
 model_class: ElasticNet
 model_module: sklearn.linear_model
 model_name: elastic_net
@@ -70,4 +70,4 @@ train_metrics:
   - *id001
   - !!binary |
     9pEVexO4FkA=
-trained_at: '2026-01-05T19:12:59.563009'
+trained_at: '2026-01-05T23:34:55.584625'

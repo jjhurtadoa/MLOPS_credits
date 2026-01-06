@@ -28,7 +28,7 @@ cv_results:
   - *id001
   - !!binary |
     s7a85ZpF3j8=
-mlflow_run_id: 45b7b003bbef4acfa117bf6448efc4ed
+mlflow_run_id: b8abba9d411a47e588fa01b705b79734
 model_class: LGBMRegressor
 model_module: lightgbm
 model_name: lightgbm
@@ -71,4 +71,4 @@ train_metrics:
   - *id001
   - !!binary |
     ftBB7t7X+D8=
-trained_at: '2026-01-05T19:12:51.490544'
+trained_at: '2026-01-05T23:34:45.497023'

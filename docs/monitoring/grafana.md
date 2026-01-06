@@ -1,88 +1,62 @@
-# Grafana - Visualización de Métricas
+# Grafana — Quick Guide
 
-## 🎯 Propósito
+> Visualiza métricas de Prometheus y crea dashboards para el servicio y el modelo.
 
-Grafana lee métricas de Prometheus y las visualiza en dashboards interactivos.
-
----
-
-## 🚀 Acceso
-
-- **URL:** http://localhost:3000
-- **Usuario:** `admin`
-- **Contraseña:** `admin`
+## UI rápida
+- URL: http://localhost:3000
+- Usuario/Pass por defecto: `admin` / `admin`
 
 ---
 
-## 📊 Dashboard Principal
-
-![Grafana Dashboard](../../images/grafana-01-dashboard.png)
-
-### Paneles incluidos
-
-1. **Total Requests** - Contador total
-2. **Requests per Second** - Gráfica de tiempo
-3. **Average Response Time** - Latencia promedio
-4. **Requests by Endpoint** - Distribución de tráfico
+## Objetivo
+Crear paneles que muestren salud del servicio (latencia, errores, throughput) y calidad del modelo (error, drift, distribución de predicciones).
 
 ---
 
-## 🎨 Crear Panel Personalizado
+## Panels recomendados
+- Latencia por endpoint (p50/p95/p99). Ejemplo PromQL:
+  `histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, endpoint))`
+- Throughput: peticiones/sec por endpoint. Ejemplo:
+  `rate(http_requests_total[5m])`
+- Tasa de errores por endpoint (`rate(http_requests_total{status=~"5.."}[5m])`)
+- Histogramas por feature o por latencia para detectar drift/regresiones
+- Anotar releases/model-version y crear alertas sobre p95 latencia o subida de errores
 
-### 1. Agregar panel
+---
 
-Click en **"Add"** → **"Visualization"**
+## Ejemplo rápido: crear panel de throughput
+1. Add → Dashboard → Add new panel
+2. Datasource: Prometheus
+3. Query: `rate(http_requests_total[5m])`
+4. Type: Time series, Unit: ops/s
 
-### 2. Seleccionar datasource
+---
 
-Seleccionar **"Prometheus"**
-
-### 3. Query PromQL
-
+## Panel de latencia (p95)
+Query ejemplo:
 ```promql
-rate(http_requests_total{path="/predict"}[5m])
+histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, endpoint))
 ```
 
-### 4. Configurar visualización
+## Ver ejemplos (imágenes)
 
-- **Type:** Time series
-- **Title:** "Predictions per Second"
-- **Unit:** ops/sec
+![Dashboard general](../../images/grafana-01-dashboard.png)
 
-### 5. Aplicar
-
-Click **"Apply"**
+![Panel detalle](../../images/grafana-02-detail-status-code.png)
 
 ---
 
-## 📸 Ejemplo de Panel de Latencia
-
-![Grafana Detail](../../images/grafana-02-detail.png)
-
-**Query:**
-```promql
-histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, path))
-```
+## Buenas prácticas
+- Anotar releases/model-version en Grafana (tags/time range) para correlacionar cambios.
+- Usar variables (dashboard variables) para seleccionar `model` o `version`.
+- Crear alertas basadas en métricas clave (p95 latency, error increase, drift threshold).
+- Guardar dashboards como JSON y versionarlos en el repo.
 
 ---
 
-## 🔔 Alertas (Mejora futura)
-
-```yaml
-# Alerta si latencia > 1s
-alert:  HighLatency
-expr: http_request_duration_seconds_sum / http_request_duration_seconds_count > 1
-for:  5m
-annotations:
-  summary:  "Latencia alta detectada"
-```
-
----
-
-## 📖 Referencias
-
-- [Grafana Dashboards](https://grafana.com/grafana/dashboards/)
-- [PromQL for Grafana](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+## Enlaces útiles
+- Grafana docs: https://grafana.com/docs/
+- Dashboards export/import: https://grafana.com/docs/grafana/latest/dashboards/
 
 ---
 

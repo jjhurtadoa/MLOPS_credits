@@ -254,7 +254,7 @@ model_loader.load_model(...)
 #### **Preprocesamiento automático:**
 ```python
 # En main.py
-X_raw = features. to_dataframe()  # 13 features originales
+X_raw = features.to_dataframe()  # 13 features originales
 X_final = preprocessor_loader.preprocess(X_raw)  # Preprocessing completo
 prediction = model_loader.predict(X_final)
 ```
@@ -291,101 +291,13 @@ artifacts/
 
 **Asegúrate de correr antes:**
 ```bash
-python -m src.preprocess. run_preprocess
+python -m src.preprocess.run_preprocess
 python -m src.train.run_train --optimize
 ```
 
 ---
 
-## 🐳 Docker
 
-### **Build**
-```bash
-docker build -t mlops-housing-api .
-```
-
-### **Run**
-```bash
-docker run -p 8000:8000 mlops-housing-api
-
-# Test
-curl http://localhost:8000/health
-```
-
-### **Docker Compose** (recomendado)
-```bash
-docker-compose up -d
-
-# Ver logs
-docker-compose logs -f
-
-# Detener
-docker-compose down
-```
-
-**Ventajas de Docker Compose:**
-- ✅ Volúmenes montados (cambiar modelo sin rebuild)
-- ✅ Healthcheck automático
-- ✅ Restart automático
-- ✅ Variables de entorno
-
----
-
-## ⚙️ Configuración Avanzada
-
-### **Variables de entorno** (opcional)
-
-Crea `.env` en raíz:
-```bash
-# .env
-APP_NAME="My Custom API"
-MODEL_PATH=artifacts/models/custom_model.pkl
-PORT=9000
-CORS_ORIGINS=["http://localhost:3000"]
-```
-
-La API las lee automáticamente gracias a `pydantic-settings`.
-
----
-
-## 🔒 Validación de Datos
-
-### **Automática (Pydantic)**
-- ✅ Tipos de datos (float, int)
-- ✅ Rangos (`ge=0`, `le=100`)
-- ✅ Requeridos vs opcionales
-
-### **Errores claros:**
-```json
-{
-  "detail": [
-    {
-      "loc":  ["body", "RM"],
-      "msg": "field required",
-      "type": "value_error.missing"
-    }
-  ]
-}
-```
-
----
-
-## 📊 Features de Producción
-
-| Feature | Implementado |
-|---------|--------------|
-| Singleton pattern (cache modelo) | ✅ |
-| Logging estructurado | ✅ |
-| Health check | ✅ |
-| CORS | ✅ |
-| Validación de datos | ✅ |
-| Docs automáticas | ✅ |
-| Docker ready | ✅ |
-| Gunicorn + workers | ✅ |
-| Non-root user (Docker) | ✅ |
-| Healthcheck (Docker) | ✅ |
-
----
 
 ## 🔗 Ver también
 

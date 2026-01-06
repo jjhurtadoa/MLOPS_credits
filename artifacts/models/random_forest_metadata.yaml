@@ -19,7 +19,7 @@ cv_results:
   cv_mean: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
-    WvNcaEugEEA=
+    W/NcaEugEEA=
   cv_min: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
@@ -28,7 +28,7 @@ cv_results:
   - *id001
   - !!binary |
     GgREuYmD4D8=
-mlflow_run_id: c6139907ab0c4faf9f725206d83b7345
+mlflow_run_id: caa893c9c3874936b079ab2910a68df4
 model_class: RandomForestRegressor
 model_module: sklearn.ensemble
 model_name: random_forest
@@ -44,7 +44,7 @@ test_metrics:
   mape: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
-    PpEpRZzrJkA=
+    P5EpRZzrJkA=
   r2: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
@@ -52,7 +52,7 @@ test_metrics:
   rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
-    s7bVpQlSB0A=
+    tbbVpQlSB0A=
 train_metrics:
   mae: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
@@ -61,7 +61,7 @@ train_metrics:
   mape: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
-    zmdN9Ok/E0A=
+    z2dN9Ok/E0A=
   r2: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
@@ -69,5 +69,5 @@ train_metrics:
   rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
-    axmC/EU5+D8=
-trained_at: '2026-01-05T19:12:39.502506'
+    bBmC/EU5+D8=
+trained_at: '2026-01-05T23:34:30.496562'

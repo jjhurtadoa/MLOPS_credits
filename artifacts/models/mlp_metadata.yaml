@@ -28,7 +28,7 @@ cv_results:
   - *id001
   - !!binary |
     R6H++BmMAUA=
-mlflow_run_id: 6e178bff4c9b469992f09bd1144aad6d
+mlflow_run_id: 8ddbb5a44e124f9e8dc5dd9c40c18ce0
 model_class: MLPRegressor
 model_module: sklearn.neural_network
 model_name: mlp
@@ -70,4 +70,4 @@ train_metrics:
   - *id001
   - !!binary |
     Hm86cH1hEUA=
-trained_at: '2026-01-05T19:13:06.187999'
+trained_at: '2026-01-05T23:35:03.716893'

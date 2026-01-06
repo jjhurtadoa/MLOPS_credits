@@ -229,3 +229,12 @@ git add artifacts/models/best_model.pkl -f
 git commit -m "feat: add model with Git LFS" <br>
 git push origin main
 ```
+
+---
+
+## Uso de herramientas AI
+
+Usé herramientas de asistencia basadas en IA durante el desarrollo y la documentación:
+
+- GitHub Copilot Chat (web) — orientación práctica sobre dockerización, monitorización y CI/CD; apoyo en redacción y propuestas.
+- GitHub Copilot (extensión VS Code) — autocompletado, generación de snippets y plantillas para scripts/tests.
