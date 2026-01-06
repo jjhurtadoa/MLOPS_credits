@@ -1,5 +1,5 @@
 cv_results:
-  cv_max: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_max: !!python/object/apply:numpy.core.multiarray.scalar
   - &id001 !!python/object/apply:numpy.dtype
     args:
     - f8
@@ -16,19 +16,19 @@ cv_results:
     - 0
   - !!binary |
     HJUUHpZvFUA=
-  cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_mean: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     kdN8N0wQE0A=
-  cv_min: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_min: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     9zsXgR8eEUA=
-  cv_std: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_std: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     BaOJNz2l2j8=
-mlflow_run_id: d0cf2edc7f1e45849d5e7fcd9d055dac
+mlflow_run_id: 7a97a09bd33e4bec85dc6b33f82a4ac2
 model_class: Ridge
 model_module: sklearn.linear_model
 model_name: ridge
@@ -36,19 +36,37 @@ model_path: artifacts\models\ridge_model.pkl
 params:
   random_state: 42
 test_metrics:
-  mae: 2.999402532562531
-  mape: 15.194077973864422
-  r2: 0.7117926357655895
-  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  mae: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SCpHwcb+B0A=
+  mape: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Rz4tMF5jLkA=
+  r2: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +LKEWQHH5j8=
+  rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     +JNqbqdjEkA=
 train_metrics:
-  mae: 3.28468274869603
-  mape: 16.197319176112927
-  r2: 0.76082018025136
-  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  mae: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JRS7vwdHCkA=
+  mape: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    WEdwgoMyMEA=
+  r2: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FSAKkKNY6D8=
+  rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     ieIopro7EkA=
-trained_at: '2026-01-03T22:59:25.874694'
+trained_at: '2026-01-05T19:12:55.489014'

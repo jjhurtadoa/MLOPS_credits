@@ -11,10 +11,10 @@ Flujo:
     7.Guardar artifacts
 
 Uso:
-    # Baseline (rápido - ~5 min)
+    # Baseline
     python -m src.train.run_train
     
-    # Baseline + Optimización (lento - ~60 min)
+    # Baseline + Optimización 
     python -m src.train.run_train --optimize --n-trials 100
     
     # Solo algunos modelos

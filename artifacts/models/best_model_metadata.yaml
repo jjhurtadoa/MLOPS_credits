@@ -1,23 +1,24 @@
-base_model: xgboost
-baseline_rmse: 2.7598851104928785
-best_params:
-  colsample_bytree: 0.8524467510857595
-  learning_rate: 0.01599827525055833
-  max_depth: 4
-  n_estimators: 499
-  reg_alpha: 0.3048196844621736
-  reg_lambda: 0.21309420911201638
-  subsample: 0.7227610020102663
-improvement: 0.4143958538624086
-model_name: xgboost_optimized
-n_trials: 100
-optimization: optuna
-optimized_rmse: 2.34548925663047
+cv_results:
+  cv_max: 5.451478762947099
+  cv_mean: 4.296871269093691
+  cv_min: 3.3189035443759445
+  cv_std: 0.7107144451943596
+mlflow_run_id: 158acdfcbbad455cade8ebd82b3eafc6
+model_class: XGBRegressor
+model_module: xgboost
+model_name: xgboost
+model_path: artifacts\models\xgboost_model.pkl
+params:
+  n_jobs: -1
+  random_state: 42
 test_metrics:
-  mae: 1.8081365173938226
-  r2: 0.9249824621628763
-  rmse: 2.34548925663047
+  mae: 2.039425713408227
+  mape: 10.956634498603595
+  r2: 0.8961329213512957
+  rmse: 2.7598851104928785
 train_metrics:
-  mae: 0.8650183528956802
-  r2: 0.9858217338283494
-  rmse: 1.1098262218838433
+  mae: 0.01307925894708916
+  mape: 0.07187381644075212
+  r2: 0.9999959570231639
+  rmse: 0.018741055449649026
+trained_at: '2026-01-05T19:12:45.765504'

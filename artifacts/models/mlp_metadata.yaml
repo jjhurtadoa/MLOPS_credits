@@ -1,5 +1,5 @@
 cv_results:
-  cv_max: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_max: !!python/object/apply:numpy.core.multiarray.scalar
   - &id001 !!python/object/apply:numpy.dtype
     args:
     - f8
@@ -16,19 +16,19 @@ cv_results:
     - 0
   - !!binary |
     4NaY1uPgIkA=
-  cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_mean: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     moGMAM+IFUA=
-  cv_min: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_min: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     h0g8blAPCkA=
-  cv_std: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_std: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     R6H++BmMAUA=
-mlflow_run_id: e6055618fd104d989e1c50f99b0b0c90
+mlflow_run_id: 6e178bff4c9b469992f09bd1144aad6d
 model_class: MLPRegressor
 model_module: sklearn.neural_network
 model_name: mlp
@@ -37,19 +37,37 @@ params:
   max_iter: 1000
   random_state: 42
 test_metrics:
-  mae: 2.5939405154344906
-  mape: 14.347279223137727
-  r2: 0.7357560613013714
-  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  mae: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8XuM4mPABEA=
+  mape: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5ukTlc6xLEA=
+  r2: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8PCjS1CL5z8=
+  rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     IBqM6LGbEUA=
 train_metrics:
-  mae: 2.994546664367538
-  mape: 14.859141065914208
-  r2: 0.7826629752651529
-  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  mae: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    i2+u4dT0B0A=
+  mape: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EoF5VuG3LUA=
+  r2: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dblROZML6T8=
+  rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     Hm86cH1hEUA=
-trained_at: '2026-01-03T22:59:37.378658'
+trained_at: '2026-01-05T19:13:06.187999'

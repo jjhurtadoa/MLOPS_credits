@@ -1,5 +1,5 @@
 cv_results:
-  cv_max: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_max: !!python/object/apply:numpy.core.multiarray.scalar
   - &id001 !!python/object/apply:numpy.dtype
     args:
     - f8
@@ -16,19 +16,19 @@ cv_results:
     - 0
   - !!binary |
     Bga/qyyDFEA=
-  cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_mean: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     WvNcaEugEEA=
-  cv_min: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_min: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     8viY8hdADUA=
-  cv_std: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_std: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     GgREuYmD4D8=
-mlflow_run_id: 1590946085444683850fb75f8843dcde
+mlflow_run_id: c6139907ab0c4faf9f725206d83b7345
 model_class: RandomForestRegressor
 model_module: sklearn.ensemble
 model_name: random_forest
@@ -37,19 +37,37 @@ params:
   n_jobs: -1
   random_state: 42
 test_metrics:
-  mae: 2.091313725490197
-  mape: 11.460176621746196
-  r2: 0.8841248923292229
-  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  mae: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
-    tLbVpQlSB0A=
+    I0DFsAK7AEA=
+  mape: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    PpEpRZzrJkA=
+  r2: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6EVEScBK7D8=
+  rmse: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    s7bVpQlSB0A=
 train_metrics:
-  mae: 0.9601683168316822
-  mape: 4.812415902351815
-  r2: 0.9736151261963086
-  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  mae: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    clHu57K57j8=
+  mape: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zmdN9Ok/E0A=
+  r2: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DO686Non7z8=
+  rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     axmC/EU5+D8=
-trained_at: '2026-01-03T22:59:01.533812'
+trained_at: '2026-01-05T19:12:39.502506'

@@ -1,5 +1,5 @@
 cv_results:
-  cv_max: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_max: !!python/object/apply:numpy.core.multiarray.scalar
   - &id001 !!python/object/apply:numpy.dtype
     args:
     - f8
@@ -16,19 +16,19 @@ cv_results:
     - 0
   - !!binary |
     hwppM57KEUA=
-  cv_mean: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_mean: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     Hm14kP47DkA=
-  cv_min: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_min: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     tHfFub79CUA=
-  cv_std: !!python/object/apply:numpy._core.multiarray.scalar
+  cv_std: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     s7a85ZpF3j8=
-mlflow_run_id: 61f81eef378c454b841d7e41c7382f2b
+mlflow_run_id: 45b7b003bbef4acfa117bf6448efc4ed
 model_class: LGBMRegressor
 model_module: lightgbm
 model_name: lightgbm
@@ -38,19 +38,37 @@ params:
   random_state: 42
   verbose: -1
 test_metrics:
-  mae: 2.1752389878431395
-  mape: 11.144022723929172
-  r2: 0.8527315814412902
-  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  mae: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1SnOsuNmAUA=
+  mape: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MlCyWL1JJkA=
+  r2: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gdDRvZNJ6z8=
+  rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     ui7bQ1ZKCkA=
 train_metrics:
-  mae: 0.9285569146540044
-  mape: 4.550165136048787
-  r2: 0.9722482831836282
-  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  mae: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Tzyd/by27T8=
+  mape: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bepKfV4zEkA=
+  r2: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4bR7bqgc7z8=
+  rmse: !!python/object/apply:numpy.core.multiarray.scalar
   - *id001
   - !!binary |
     ftBB7t7X+D8=
-trained_at: '2026-01-03T22:59:16.295659'
+trained_at: '2026-01-05T19:12:51.490544'
