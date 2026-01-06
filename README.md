@@ -33,7 +33,8 @@ Incluye:
 - 🔧 Configuración de servicios (API, Prometheus, Grafana)
 - 🧪 Estrategia de testing
 - 📈 Monitoreo y métricas
-- 🚀 CI/CD
+- 🔄 CI/CD
+- 🚀 Mejoras
 
 ---
 

@@ -35,6 +35,7 @@
 - [**Tests**](./tests.md) - Estructura de tests, comandos pytest y criterios para tests de integración/funcionales.
 - [**Model**](./model.md) - Convenciones de modelos y metadata: qué contiene `artifacts/models` y cómo versionar modelos.
 - [**EDA**](./eda.md) - Notebook EDA y hallazgos clave del análisis exploratorio (insights útiles para features).
+- [**ROADMAP**](./roadmap.md) - Mejoras futuras a corto, mediano y largo plazo.
 
 
 ---
