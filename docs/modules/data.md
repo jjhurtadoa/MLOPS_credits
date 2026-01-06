@@ -96,4 +96,3 @@ CSV Raw → Validación → Split (80/20) → Guardar
 ## 🔗 Ver también
 
 - [Configuration](../configuration.md#data-config)
-- [Pipeline completo](../pipelines.md)
