@@ -43,7 +43,7 @@ docker:
 
 **URL:** https://github.com/jjhurtadoa/MLOPS_credits/actions
 
-![GitHub Actions Success](../../images/github-action-success.png)
+![GitHub Actions Success](../../images/github-action-success.PNG)
 
 ---
 

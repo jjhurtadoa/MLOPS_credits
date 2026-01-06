@@ -40,9 +40,9 @@ histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by 
 
 ## Ver ejemplos (imágenes)
 
-![Dashboard general](../../images/grafana-01-dashboard.png)
+![Dashboard general](../../images/grafana-01-dashboard.PNG)
 
-![Panel detalle](../../images/grafana-02-detail-status-code.png)
+![Panel detalle](../../images/grafana-02-detail-status-code.PNG)
 
 ---
 

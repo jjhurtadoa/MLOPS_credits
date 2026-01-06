@@ -26,11 +26,11 @@ Prometheus es la herramienta para *revisar* y consultar métricas de tiempo (tim
 ## Imágenes de referencia
 Targets (verificación):
 
-![Prometheus Targets](../../images/prometheus-01-target.png)
+![Prometheus Targets](../../images/prometheus-01-target.PNG)
 
 Ejemplo de query/visualización:
 
-![Prometheus Graph](../../images/prometheus-02-graph.png)
+![Prometheus Graph](../../images/prometheus-02-graph.PNG)
 
 ---
 
